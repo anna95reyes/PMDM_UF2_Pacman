@@ -1,0 +1,122 @@
+package com.example.pacman;
+
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PointF;
+import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+
+import androidx.annotation.NonNull;
+
+import com.example.pacman.model.Escenari;
+import com.example.pacman.model.GameObject;
+import com.example.pacman.model.Ghost;
+import com.example.pacman.model.MovimentJoystick;
+import com.example.pacman.model.Pacman;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+public class DemoSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
+
+    private SurfaceThread mThread;
+
+    private SimpleDateFormat mFormatter;
+    private Paint mPaint;
+    private Escenari mEscenari;
+    //------------------------------------------
+    List<GameObject> mGameObjects;
+    //------------------------------------------
+
+    public DemoSurfaceView(Context context) {
+        this(context, null);
+    }
+
+    public DemoSurfaceView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        mPaint = new Paint();
+        mPaint.setColor(Color.WHITE);
+        getHolder().addCallback(this);
+        mGameObjects = new ArrayList<>();
+        mFormatter = new SimpleDateFormat("HH:mm:ss.SS");
+
+    }
+
+    public MovimentJoystick getMovimentJoystick() {
+        return mMoviment;
+    }
+
+
+    PointF posicioDelDit;
+    MovimentJoystick mMoviment;
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        super.onTouchEvent(event);
+
+        if (event.getActionMasked() == MotionEvent.ACTION_DOWN) { //cuan acaba de baixar el dit
+            posicioDelDit = new PointF(event.getX(), event.getY());
+        } else if (event.getActionMasked() == MotionEvent.ACTION_UP) { //axeco el dit
+            posicioDelDit = null;
+            mMoviment = null;
+        } else {
+            //el dit s'esta arrsegant per la pantalla
+            float x = event.getX() - posicioDelDit.x;
+            float y = event.getY() - posicioDelDit.y;
+            mMoviment = new MovimentJoystick(
+                    (int)Math.signum(x) * (Math.abs(x) > Math.abs(y) ? 1 : 0),
+                    (int)Math.signum(y) * (Math.abs(x) < Math.abs(y) ? 1 : 0));
+        }
+
+        return true;
+    }
+
+    @Override
+    public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
+
+        // Creació de l'escenari de joc
+        mEscenari = new Escenari(this);
+        mGameObjects.add(mEscenari);
+
+        mGameObjects.add(new Pacman(this, 45, 42, mEscenari.getMidaCella()));
+        mGameObjects.add(new Ghost(this, 53, 66, mEscenari.getMidaCella()));
+
+        mThread = new SurfaceThread(this);
+        mThread.start(); // engega el fil
+    }
+
+    @Override
+    public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
+        if(mThread!=null){
+            mThread.muerete();
+        }
+    }
+
+    public void onPaintCasola(Canvas canvas) {
+        canvas.drawColor(Color.BLACK);
+
+        for(GameObject b:mGameObjects){
+            b.onDraw(canvas);
+        }
+
+    }
+
+    public void tick() {
+        for(GameObject b:mGameObjects){
+            b.tick();
+        }
+    }
+
+    public Escenari getEscenari() {
+        return mEscenari;
+    }
+}
