@@ -12,11 +12,15 @@ import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
 
+import com.example.pacman.model.Blinky;
+import com.example.pacman.model.Clyde;
 import com.example.pacman.model.Escenari;
 import com.example.pacman.model.GameObject;
 import com.example.pacman.model.Ghost;
+import com.example.pacman.model.Inky;
 import com.example.pacman.model.MovimentJoystick;
 import com.example.pacman.model.Pacman;
+import com.example.pacman.model.Pinky;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,11 +43,8 @@ public class DemoSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     public DemoSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mPaint = new Paint();
-        mPaint.setColor(Color.WHITE);
         getHolder().addCallback(this);
         mGameObjects = new ArrayList<>();
-        mFormatter = new SimpleDateFormat("HH:mm:ss.SS");
 
     }
 
@@ -83,7 +84,10 @@ public class DemoSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         mGameObjects.add(mEscenari);
 
         mGameObjects.add(new Pacman(this, 45, 42, mEscenari.getMidaCella()));
-        mGameObjects.add(new Ghost(this, 53, 66, mEscenari.getMidaCella()));
+        mGameObjects.add(new Blinky(this, 48, 46, mEscenari.getMidaCella()));
+        mGameObjects.add(new Clyde(this, 48, 46, mEscenari.getMidaCella()));
+        mGameObjects.add(new Pinky(this, 48, 46, mEscenari.getMidaCella()));
+        mGameObjects.add(new Inky(this, 48, 46, mEscenari.getMidaCella()));
 
         mThread = new SurfaceThread(this);
         mThread.start(); // engega el fil

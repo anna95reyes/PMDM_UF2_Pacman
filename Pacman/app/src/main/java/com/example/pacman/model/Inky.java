@@ -8,56 +8,23 @@ import com.example.pacman.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Ghost extends Sprite {
+public class Inky extends Ghost {
 
-    //Distancia en pixels recorreguda per ticks
-
-    protected float pasEnPixels;
-
-    protected Point mPosObjectiu = new Point(4, 8);
-
-    public Ghost(DemoSurfaceView view, int width, int height, int midaCella) {
-        super(view, width, height, midaCella, midaCella);
-
-        //mPosicio = mEscenari.getPosicioIniciBlinky();
-
-        pasEnPixels = midaCella / 10.0f;
-
-        modeEspantat(false);
-    }
-
-    public void modeEspantat(boolean esticCagat) {
-        setSpriteActiu(esticCagat ? 1 : 0);
+    public Inky(DemoSurfaceView view, int width, int height, int midaCella) {
+        super(view, width, height, midaCella);
+        mPosicio = mEscenari.getPosicioIniciInky();
     }
 
     @Override
     public List<Integer> getSprites() {
         List<Integer> sprites = new ArrayList<>();
-        sprites.add(R.drawable.blinky);
-        sprites.add(R.drawable.pinky);
         sprites.add(R.drawable.inky);
-        sprites.add(R.drawable.clyde);
         sprites.add(R.drawable.espantat);
         return sprites;
     }
 
-    protected MovimentJoystick mMove = new MovimentJoystick(1, 0);
-
     @Override
-    public void tick() {
-        super.tick();
-
-        if (mEscenari.esticALaCasella(this.mPosicio)){
-
-            // mirar si he de canviar de direccio
-            this.mMove = recalculaDireccio();
-        }
-
-        this.mPosicio.x += mMove.x * pasEnPixels;
-        this.mPosicio.y += mMove.y * pasEnPixels;
-    }
-
-    protected abstract MovimentJoystick recalculaDireccio(); /*{
+    protected MovimentJoystick recalculaDireccio() {
 
         boolean canviDireccio = false;
 
@@ -86,5 +53,5 @@ public abstract class Ghost extends Sprite {
 
         return mMove; //no canviem direccio
 
-    }*/
+    }
 }

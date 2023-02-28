@@ -42,7 +42,7 @@ public abstract class Sprite extends GameObject {
 
         mBitmapSprites = new ArrayList<>();
         mBitmapFrames = new ArrayList<>();//per sabet quants fotogrames te el Bitmap
-        mSpriteActiu = 1; //Quan el fantasma entra en mode que el poden menjar canviem el spriteActiu a 1 quan es normal a 0
+        mSpriteActiu = 0; //Quan el fantasma entra en mode que el poden menjar canviem el spriteActiu a 1 quan es normal a 0
         for (int idRes : getSprites()) {
             Bitmap m = BitmapFactory.decodeResource(view.getResources(), idRes);
             mBitmapFrames.add(m.getWidth() / mWidth);
