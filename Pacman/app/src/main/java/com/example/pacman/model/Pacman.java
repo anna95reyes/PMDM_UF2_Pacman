@@ -43,6 +43,10 @@ public class Pacman extends Sprite {
 
         if (mEscenari.esticALaCasella(this.mPosicio)){
 
+            /*if (mEscenari.getCella(mEscenari.getPosicioALaGraella(mPosicio)).ordinal() == 700) {
+
+            }*/
+
             if (mView.getMovimentJoystick() != null) {
                 MovimentJoystick direccioDemanada = mView.getMovimentJoystick();
                 if (mEscenari.emPucMoureEnDireccio(mPosicio, new Point(direccioDemanada.x, direccioDemanada.y))) {

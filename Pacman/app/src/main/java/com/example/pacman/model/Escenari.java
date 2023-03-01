@@ -113,11 +113,11 @@ public class Escenari extends GameObject {
         for (int x = 0; x < columnes; x++, posicio.x += midaCella){
             posicio.y = 0;
             for (int y = 0; y < files; y++, posicio.y += midaCella) {
-                if (escenari[y][x] == TipusCasella.PARET.ordinal()) {
+                if (escenari[y][x] == TipusCasella.PARET.codi) {
                     dibuixarParet(canvas, new Point(x, y));
-                } else if (escenari[y][x] == TipusCasella.COCO.ordinal()) {
+                } else if (escenari[y][x] == TipusCasella.COCO.codi) {
                     dibuixaCoco(canvas, posicio, 6);
-                } else if (escenari[y][x] == TipusCasella.SUPERCOCO.ordinal()) {
+                } else if (escenari[y][x] == TipusCasella.SUPERCOCO.codi) {
                     dibuixaCoco(canvas, posicio, 3);
                 }
 
@@ -224,23 +224,23 @@ public class Escenari extends GameObject {
     }
 
     public PointF getPosicioIniciPacman() {
-        return getPosicioInici(600);
+        return getPosicioInici(TipusCasella.POSICIO_INICI_PACMAN.codi);
     }
 
     public PointF getPosicioIniciBlinky() {
-        return getPosicioInici(601);
+        return getPosicioInici(TipusCasella.POSICIO_INICI_BLINKY.codi);
     }
 
     public PointF getPosicioIniciClyde() {
-        return getPosicioInici(602);
+        return getPosicioInici(TipusCasella.POSICIO_INICI_CLYDE.codi);
     }
 
     public PointF getPosicioIniciPinky() {
-        return getPosicioInici(603);
+        return getPosicioInici(TipusCasella.POSICIO_INICI_PINKY.codi);
     }
 
     public PointF getPosicioIniciInky() {
-        return getPosicioInici(604);
+        return getPosicioInici(TipusCasella.POSICIO_INICI_INKY.codi);
     }
 
     public int getMidaCella() {

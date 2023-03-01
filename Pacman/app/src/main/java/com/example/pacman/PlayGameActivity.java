@@ -28,7 +28,7 @@ public class PlayGameActivity extends AppCompatActivity {
             }
         });
 
-        binding.btnAbout.setOnClickListener(new View.OnClickListener() {
+        binding.btnExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
