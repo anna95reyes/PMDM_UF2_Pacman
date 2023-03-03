@@ -1,7 +1,7 @@
 package com.example.pacman.model;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
@@ -18,6 +18,9 @@ public class Escenari extends GameObject {
     private int columnes;
     private Paint pParet;
     private Paint pGroga;
+    private Bitmap mBackground;
+    private Canvas mCanvas;
+    private int mMida;
 
     private static final int escenari[][] = {
             {0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0},
@@ -56,11 +59,11 @@ public class Escenari extends GameObject {
 
     public Escenari(DemoSurfaceView view) {
         super(view);
-        int mida = Math.min(view.getWidth(), view.getHeight());
+        mMida = Math.min(view.getWidth(), view.getHeight());
 
         files = escenari.length;
         columnes = escenari[0].length;
-        midaCella = mida / columnes;
+        midaCella = mMida / columnes;
 
         //inicialitzacio de pintures
         pParet = new Paint();
@@ -70,6 +73,10 @@ public class Escenari extends GameObject {
 
         pGroga = new Paint();
         pGroga.setColor(view.getResources().getColor(R.color.coco));
+
+        mBackground = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        mCanvas = new Canvas(mBackground);
+        inicialitzarEscenari(mCanvas);
     }
 
     // Donada la posicio en pixels d'un personatge ens retorna la posicio a la graella
@@ -109,16 +116,31 @@ public class Escenari extends GameObject {
 
     @Override
     public void onDraw(Canvas canvas) {
+
+        canvas.drawBitmap(mBackground, 0,0 , pParet);
+
+        Point posicio = new Point(0, 0);
+        for (int x = 0; x < columnes; x++, posicio.x += midaCella){
+            posicio.y = 0;
+            for (int y = 0; y < files; y++, posicio.y += midaCella) {
+                if (escenari[y][x] == TipusCasella.COCO.codi) {
+                    dibuixaCoco(canvas, posicio, 6);
+                } else if (escenari[y][x] == TipusCasella.SUPERCOCO.codi) {
+                    dibuixaCoco(canvas, posicio, 3);
+                }
+
+            }
+        }
+
+    }
+
+    public void inicialitzarEscenari(Canvas canvas) {
         Point posicio = new Point(0, 0);
         for (int x = 0; x < columnes; x++, posicio.x += midaCella){
             posicio.y = 0;
             for (int y = 0; y < files; y++, posicio.y += midaCella) {
                 if (escenari[y][x] == TipusCasella.PARET.codi) {
                     dibuixarParet(canvas, new Point(x, y));
-                } else if (escenari[y][x] == TipusCasella.COCO.codi) {
-                    dibuixaCoco(canvas, posicio, 6);
-                } else if (escenari[y][x] == TipusCasella.SUPERCOCO.codi) {
-                    dibuixaCoco(canvas, posicio, 3);
                 }
 
             }
