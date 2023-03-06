@@ -10,6 +10,8 @@ import android.graphics.PointF;
 import com.example.pacman.DemoSurfaceView;
 import com.example.pacman.R;
 
+import java.util.HashMap;
+
 public class Escenari extends GameObject {
 
     private static final float TOLERANCIA = 0.1f;
@@ -21,6 +23,8 @@ public class Escenari extends GameObject {
     private Bitmap mBackground;
     private Canvas mCanvas;
     private int mMida;
+
+    private HashMap<Integer, TipusCasella> tipusCasella;
 
     private static final int escenari[][] = {
             {0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0},
@@ -37,7 +41,7 @@ public class Escenari extends GameObject {
             {0,   2,   0,   0,   0,   0,   2,   0,   0,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   0,   0,   2,   0,   0,   0,   0,   2,   0},
             {0,   2,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   2,   0},
             {0,   2,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   2,   0},
-            {0,   2,   2,   2,   2,   2,   2,   2,   2,   601, 2,   2,   2,   2,   2,   2,   2,   2,   602, 2,   2,   2,   2,   2,   2,   2,   2,   0},
+            {700,   2,   2,   2,   2,   2,   2,   2,   2,   601, 2,   2,   2,   2,   2,   2,   2,   2,   602, 2,   2,   2,   2,   2,   2,   2,   2,   701},
             {0,   2,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   2,   0},
             {0,   2,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   2,   0},
             {0,   2,   0,   0,   0,   0,   2,   0,   0,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   0,   0,   2,   0,   0,   0,   0,   2,   0},
@@ -77,6 +81,23 @@ public class Escenari extends GameObject {
         mBackground = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
         mCanvas = new Canvas(mBackground);
         inicialitzarEscenari(mCanvas);
+
+        inicilitzarHashTipusCasella();
+    }
+
+    private void inicilitzarHashTipusCasella() {
+        tipusCasella = new HashMap<Integer, TipusCasella>();
+        tipusCasella.put(TipusCasella.PARET.codi, TipusCasella.PARET);
+        tipusCasella.put(TipusCasella.CAMI.codi, TipusCasella.CAMI);
+        tipusCasella.put(TipusCasella.COCO.codi, TipusCasella.COCO);
+        tipusCasella.put(TipusCasella.SUPERCOCO.codi, TipusCasella.SUPERCOCO);
+        tipusCasella.put(TipusCasella.POSICIO_INICI_PACMAN.codi, TipusCasella.POSICIO_INICI_PACMAN);
+        tipusCasella.put(TipusCasella.POSICIO_INICI_BLINKY.codi, TipusCasella.POSICIO_INICI_BLINKY);
+        tipusCasella.put(TipusCasella.POSICIO_INICI_CLYDE.codi, TipusCasella.POSICIO_INICI_CLYDE);
+        tipusCasella.put(TipusCasella.POSICIO_INICI_PINKY.codi, TipusCasella.POSICIO_INICI_PINKY);
+        tipusCasella.put(TipusCasella.POSICIO_INICI_INKY.codi, TipusCasella.POSICIO_INICI_INKY);
+        tipusCasella.put(TipusCasella.POSICIO_INICI_TUNEL.codi, TipusCasella.POSICIO_INICI_TUNEL);
+        tipusCasella.put(TipusCasella.POSICIO_FI_TUNEL.codi, TipusCasella.POSICIO_FI_TUNEL);
     }
 
     // Donada la posicio en pixels d'un personatge ens retorna la posicio a la graella
@@ -95,7 +116,8 @@ public class Escenari extends GameObject {
     }
 
     public TipusCasella getCella(Point posGraella) {
-        return TipusCasella.values()[escenari[posGraella.y][posGraella.x]];
+        return  tipusCasella.get(escenari[posGraella.y][posGraella.x]);
+        //return TipusCasella.values()[escenari[posGraella.y][posGraella.x]];
     }
 
     public boolean emPucMoureEnDireccio(PointF posicioPixels, Point direccio){
@@ -103,6 +125,25 @@ public class Escenari extends GameObject {
         casella.x += direccio.x;
         casella.y += direccio.y;
         return getCella(casella) != TipusCasella.PARET;
+    }
+
+    public boolean esticALaBocaDelTunel(Point posGraella){
+        if (getCella(posGraella) == TipusCasella.POSICIO_INICI_TUNEL &&
+            emPucMoureEnDireccio(getPosicioEnPixels(posGraella), new Point(-1, 0))) {
+            return true;
+        } else if (getCella(posGraella) == TipusCasella.POSICIO_FI_TUNEL &&
+                emPucMoureEnDireccio(getPosicioEnPixels(posGraella), new Point(1, 0))) {
+            return true;
+        }
+        return false;
+    }
+
+    public void creuarTunel(Point posGraella) {
+        if (esticALaBocaDelTunel(posGraella) && getCella(posGraella) == TipusCasella.POSICIO_INICI_TUNEL) {
+            escenari[posGraella.y][posGraella.x] = TipusCasella.POSICIO_FI_TUNEL.codi;
+        } else if (esticALaBocaDelTunel(posGraella) && getCella(posGraella) == TipusCasella.POSICIO_FI_TUNEL) {
+            escenari[posGraella.y][posGraella.x] = TipusCasella.POSICIO_INICI_TUNEL.codi;
+        }
     }
 
     // Retornem true NOMES quan el personatge esta clavat dins de la cel·la.
@@ -236,7 +277,7 @@ public class Escenari extends GameObject {
         for (int x = 0; x < columnes; x++){
             for (int y = 0; y < files; y++) {
                 if (escenari[y][x] == posicio) {
-                    escenari[y][x] = 2;
+                    escenari[y][x] = TipusCasella.COCO.codi;
                     return getPosicioEnPixels(new Point(x, y));
                 }
 

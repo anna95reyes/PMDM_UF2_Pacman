@@ -53,8 +53,8 @@ public abstract class Ghost extends Sprite {
             this.mMove = recalculaDireccio();
         }
 
-        this.mPosicio.x += mMove.x * pasEnPixels;
-        this.mPosicio.y += mMove.y * pasEnPixels;
+        //this.mPosicio.x += mMove.x * pasEnPixels;
+        //this.mPosicio.y += mMove.y * pasEnPixels;
     }
 
     protected abstract MovimentJoystick recalculaDireccio(); /*{

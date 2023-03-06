@@ -1,6 +1,7 @@
 package com.example.pacman.model;
 
 import android.graphics.Point;
+import android.util.Log;
 
 import com.example.pacman.DemoSurfaceView;
 import com.example.pacman.R;
@@ -47,6 +48,10 @@ public class Pacman extends Sprite {
 
             }*/
 
+            if (mEscenari.esticALaBocaDelTunel(mEscenari.getPosicioALaGraella(mPosicio))) {
+                mEscenari.creuarTunel(mEscenari.getPosicioALaGraella(mPosicio));
+            }
+
             if (mView.getMovimentJoystick() != null) {
                 MovimentJoystick direccioDemanada = mView.getMovimentJoystick();
                 if (mEscenari.emPucMoureEnDireccio(mPosicio, new Point(direccioDemanada.x, direccioDemanada.y))) {
@@ -57,6 +62,10 @@ public class Pacman extends Sprite {
             if (!mEscenari.emPucMoureEnDireccio(mPosicio, new Point(mMove.x, mMove.y))) {
                 this.mMove = new MovimentJoystick(0, 0);
             }
+
+
+
+
         }
 
         this.mPosicio.x += mMove.x * pasEnPixels;
