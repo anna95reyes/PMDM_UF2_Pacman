@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.util.Log;
 
 import com.example.pacman.DemoSurfaceView;
 import com.example.pacman.R;
@@ -41,7 +42,7 @@ public class Escenari extends GameObject {
             {0,   2,   0,   0,   0,   0,   2,   0,   0,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   0,   0,   2,   0,   0,   0,   0,   2,   0},
             {0,   2,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   2,   0},
             {0,   2,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   2,   0},
-            {700,   2,   2,   2,   2,   2,   2,   2,   2,   601, 2,   2,   2,   2,   2,   2,   2,   2,   602, 2,   2,   2,   2,   2,   2,   2,   2,   701},
+            {700,   2,   600/*2*/,   2,   2,   2,   2,   2,   2,   601, 2,   2,   2,   2,   2,   2,   2,   2,   602, 2,   2,   2,   2,   2,   2,   2,   2,   701},
             {0,   2,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   2,   0},
             {0,   2,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   2,   0},
             {0,   2,   0,   0,   0,   0,   2,   0,   0,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   0,   0,   2,   0,   0,   0,   0,   2,   0},
@@ -50,7 +51,7 @@ public class Escenari extends GameObject {
             {0,   2,   2,   2,   2,   2,   2,   2,   2,   603, 2,   2,   2,   0,   0,   2,   2,   2,   604, 2,   2,   2,   2,   2,   2,   2,   2,   0},
             {0,   2,   0,   0,   0,   0,   2,   0,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   0,   2,   0,   0,   0,   0,   2,   0},
             {0,   2,   0,   0,   0,   0,   2,   0,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   0,   2,   0,   0,   0,   0,   2,   0},
-            {0,   3,   2,   2,   0,   0,   2,   2,   2,   2,   2,   2,   2,   600, 2,   2,   2,   2,   2,   2,   2,   2,   0,   0,   2,   2,   3,   0},
+            {0,   3,   2,   2,   0,   0,   2,   2,   2,   2,   2,   2,   2,   2/*600*/, 2,   2,   2,   2,   2,   2,   2,   2,   0,   0,   2,   2,   3,   0},
             {0,   0,   0,   2,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   2,   0,   0,   0},
             {0,   0,   0,   2,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   2,   0,   0,   0},
             {0,   2,   2,   2,   2,   2,   2,   0,   0,   2,   2,   2,   2,   0,   0,   2,   2,   2,   2,   0,   0,   2,   2,   2,   2,   2,   2,   0},
@@ -122,6 +123,11 @@ public class Escenari extends GameObject {
 
     public boolean emPucMoureEnDireccio(PointF posicioPixels, Point direccio){
         Point casella = getPosicioALaGraella(posicioPixels);
+        if (casella.x == 0 && direccio.x == -1 || casella.x == escenari[0].length-1 && direccio.x == 1
+        || casella.y == 0 && direccio.y == -1 || casella.y == escenari.length-1 && direccio.y == 1) {
+            Log.d("XXX", "entro");
+            return false;
+        }
         casella.x += direccio.x;
         casella.y += direccio.y;
         return getCella(casella) != TipusCasella.PARET;
@@ -129,21 +135,44 @@ public class Escenari extends GameObject {
 
     public boolean esticALaBocaDelTunel(Point posGraella){
         if (getCella(posGraella) == TipusCasella.POSICIO_INICI_TUNEL &&
-            emPucMoureEnDireccio(getPosicioEnPixels(posGraella), new Point(-1, 0))) {
+                emPucMoureEnDireccio(getPosicioEnPixels(posGraella), new Point(-1, 0))) {
+            Log.d("XXX", "estic al inici tunel");
             return true;
         } else if (getCella(posGraella) == TipusCasella.POSICIO_FI_TUNEL &&
                 emPucMoureEnDireccio(getPosicioEnPixels(posGraella), new Point(1, 0))) {
+            Log.d("XXX", "estic al fi tunel");
             return true;
         }
         return false;
     }
 
-    public void creuarTunel(Point posGraella) {
+    public PointF creuarTunel(Point posGraella) {
         if (esticALaBocaDelTunel(posGraella) && getCella(posGraella) == TipusCasella.POSICIO_INICI_TUNEL) {
-            escenari[posGraella.y][posGraella.x] = TipusCasella.POSICIO_FI_TUNEL.codi;
+            Log.d("XXX", "inici tunel: " + posicioGraellaTipusCasella(TipusCasella.POSICIO_FI_TUNEL));
+            return getPosicioEnPixels(posicioGraellaTipusCasella(TipusCasella.POSICIO_FI_TUNEL));
         } else if (esticALaBocaDelTunel(posGraella) && getCella(posGraella) == TipusCasella.POSICIO_FI_TUNEL) {
-            escenari[posGraella.y][posGraella.x] = TipusCasella.POSICIO_INICI_TUNEL.codi;
+            Log.d("XXX", "fi tunel: " + posicioGraellaTipusCasella(TipusCasella.POSICIO_INICI_TUNEL));
+            return getPosicioEnPixels(posicioGraellaTipusCasella(TipusCasella.POSICIO_INICI_TUNEL));
         }
+        return null;
+    }
+
+
+
+    public Point posicioGraellaTipusCasella (TipusCasella tipusCasella) {
+        Point posicio = new Point(0, 0);
+        Log.d("XXX", "posicio: " + posicio);
+        Log.d("XXX", "tipusCasella: " + tipusCasella);
+        for (int x = 0; x < columnes; x++, posicio.x += midaCella){
+            posicio.y = 0;
+            for (int y = 0; y < files; y++, posicio.y += midaCella) {
+                if (escenari[y][x] == tipusCasella.codi) {
+                    Log.d("XXX", "posicio x: " + x + " - posicio y: " + y);
+                    return new Point(x, y);
+                }
+            }
+        }
+        return null;
     }
 
     // Retornem true NOMES quan el personatge esta clavat dins de la cel·la.
@@ -186,7 +215,6 @@ public class Escenari extends GameObject {
 
             }
         }
-
     }
 
     private void dibuixarParet(Canvas canvas, Point p) {
