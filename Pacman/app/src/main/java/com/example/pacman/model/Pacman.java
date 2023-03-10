@@ -67,6 +67,8 @@ public class Pacman extends Sprite {
                 this.mMove = new MovimentJoystick(0, 0);
             }
 
+            mEscenari.menjarCocos(mEscenari.getPosicioALaGraella(mPosicio));
+
         }
 
         this.mPosicio.x += mMove.x * pasEnPixels;

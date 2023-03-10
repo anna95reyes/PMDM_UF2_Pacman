@@ -16,6 +16,11 @@ import java.util.HashMap;
 public class Escenari extends GameObject {
 
     private static final float TOLERANCIA = 0.1f;
+
+    private static final int PUNTUACIO_MENJAR_COCO = 10;
+    private static final int PUNTUACIO_MENJAR_SUPERCOCO = 50;
+    private static final int PUNTUACIO_MENJAR_FANTASMA = 200;
+
     private int midaCella;
     private int files;
     private int columnes;
@@ -24,6 +29,7 @@ public class Escenari extends GameObject {
     private Bitmap mBackground;
     private Canvas mCanvas;
     private int mMida;
+    private int mPuntuacio;
 
     private HashMap<Integer, TipusCasella> tipusCasella;
 
@@ -42,7 +48,7 @@ public class Escenari extends GameObject {
             {0,   2,   0,   0,   0,   0,   2,   0,   0,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   0,   0,   2,   0,   0,   0,   0,   2,   0},
             {0,   2,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   2,   0},
             {0,   2,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   2,   0},
-            {700,   2,   600/*2*/,   2,   2,   2,   2,   2,   2,   601, 2,   2,   2,   2,   2,   2,   2,   2,   602, 2,   2,   2,   2,   2,   2,   2,   2,   701},
+            {700,   2,   2,   2,   2,   2,   2,   2,   2,   601, 2,   2,   2,   2,   2,   2,   2,   2,   602, 2,   2,   2,   2,   2,   2,   2,   2,   701},
             {0,   2,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   2,   0},
             {0,   2,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   2,   0},
             {0,   2,   0,   0,   0,   0,   2,   0,   0,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   0,   0,   2,   0,   0,   0,   0,   2,   0},
@@ -51,7 +57,7 @@ public class Escenari extends GameObject {
             {0,   2,   2,   2,   2,   2,   2,   2,   2,   603, 2,   2,   2,   0,   0,   2,   2,   2,   604, 2,   2,   2,   2,   2,   2,   2,   2,   0},
             {0,   2,   0,   0,   0,   0,   2,   0,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   0,   2,   0,   0,   0,   0,   2,   0},
             {0,   2,   0,   0,   0,   0,   2,   0,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   0,   2,   0,   0,   0,   0,   2,   0},
-            {0,   3,   2,   2,   0,   0,   2,   2,   2,   2,   2,   2,   2,   2/*600*/, 2,   2,   2,   2,   2,   2,   2,   2,   0,   0,   2,   2,   3,   0},
+            {0,   3,   2,   2,   0,   0,   2,   2,   2,   2,   2,   2,   2,   600, 2,   2,   2,   2,   2,   2,   2,   2,   0,   0,   2,   2,   3,   0},
             {0,   0,   0,   2,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   2,   0,   0,   0},
             {0,   0,   0,   2,   0,   0,   2,   0,   0,   2,   0,   0,   0,   0,   0,   0,   0,   0,   2,   0,   0,   2,   0,   0,   2,   0,   0,   0},
             {0,   2,   2,   2,   2,   2,   2,   0,   0,   2,   2,   2,   2,   0,   0,   2,   2,   2,   2,   0,   0,   2,   2,   2,   2,   2,   2,   0},
@@ -69,6 +75,8 @@ public class Escenari extends GameObject {
         files = escenari.length;
         columnes = escenari[0].length;
         midaCella = mMida / columnes;
+
+        mPuntuacio = 0;
 
         //inicialitzacio de pintures
         pParet = new Paint();
@@ -175,6 +183,18 @@ public class Escenari extends GameObject {
             Math.abs(posicioPixels.y - posExacta.y) < TOLERANCIA);
     }
 
+    public void menjarCocos(Point posGraella) {
+        if (getCella(posGraella) == TipusCasella.COCO) {
+            mPuntuacio += PUNTUACIO_MENJAR_COCO;
+            escenari[posGraella.y][posGraella.x] = TipusCasella.CAMI.codi;
+        } else if (getCella(posGraella) == TipusCasella.SUPERCOCO) {
+            mPuntuacio += PUNTUACIO_MENJAR_SUPERCOCO;
+            escenari[posGraella.y][posGraella.x] = TipusCasella.CAMI.codi;
+        }
+        Log.d("XXX", "puntuacio: " + mPuntuacio);
+    }
+
+
     @Override
     public void onDraw(Canvas canvas) {
 
@@ -207,6 +227,8 @@ public class Escenari extends GameObject {
             }
         }
     }
+
+
 
     private void dibuixarParet(Canvas canvas, Point p) {
 
