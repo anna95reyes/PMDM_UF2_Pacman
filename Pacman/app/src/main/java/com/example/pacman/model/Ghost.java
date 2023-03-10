@@ -31,7 +31,7 @@ public abstract class Ghost extends Sprite {
     }
 
     @Override
-    public List<Integer> getSprites() {
+    public abstract List<Integer> getSprites(); /*{
         List<Integer> sprites = new ArrayList<>();
         sprites.add(R.drawable.blinky);
         sprites.add(R.drawable.pinky);
@@ -39,7 +39,7 @@ public abstract class Ghost extends Sprite {
         sprites.add(R.drawable.clyde);
         sprites.add(R.drawable.espantat);
         return sprites;
-    }
+    }*/
 
     protected MovimentJoystick mMove = new MovimentJoystick(1, 0);
 
