@@ -123,51 +123,42 @@ public class Escenari extends GameObject {
 
     public boolean emPucMoureEnDireccio(PointF posicioPixels, Point direccio){
         Point casella = getPosicioALaGraella(posicioPixels);
-        if (casella.x == 0 && direccio.x == -1 || casella.x == escenari[0].length-1 && direccio.x == 1
+        /*if (casella.x == 0 && direccio.x == -1 || casella.x == escenari[0].length-1 && direccio.x == 1
         || casella.y == 0 && direccio.y == -1 || casella.y == escenari.length-1 && direccio.y == 1) {
             Log.d("XXX", "entro");
             return false;
-        }
+        }*/
         casella.x += direccio.x;
         casella.y += direccio.y;
         return getCella(casella) != TipusCasella.PARET;
     }
 
-    public boolean esticALaBocaDelTunel(Point posGraella){
-        if (getCella(posGraella) == TipusCasella.POSICIO_INICI_TUNEL &&
-                emPucMoureEnDireccio(getPosicioEnPixels(posGraella), new Point(-1, 0))) {
-            Log.d("XXX", "estic al inici tunel");
-            return true;
-        } else if (getCella(posGraella) == TipusCasella.POSICIO_FI_TUNEL &&
-                emPucMoureEnDireccio(getPosicioEnPixels(posGraella), new Point(1, 0))) {
-            Log.d("XXX", "estic al fi tunel");
+    public Boolean esticALaBocaDelTunel(Point posGraella){
+        if (getCella(posGraella) == TipusCasella.POSICIO_INICI_TUNEL ||
+                getCella(posGraella) == TipusCasella.POSICIO_INICI_TUNEL) {
+            Log.d("XXX", "estic a un tunel");
             return true;
         }
         return false;
     }
 
     public PointF creuarTunel(Point posGraella) {
-        if (esticALaBocaDelTunel(posGraella) && getCella(posGraella) == TipusCasella.POSICIO_INICI_TUNEL) {
-            Log.d("XXX", "inici tunel: " + posicioGraellaTipusCasella(TipusCasella.POSICIO_FI_TUNEL));
-            return getPosicioEnPixels(posicioGraellaTipusCasella(TipusCasella.POSICIO_FI_TUNEL));
-        } else if (esticALaBocaDelTunel(posGraella) && getCella(posGraella) == TipusCasella.POSICIO_FI_TUNEL) {
-            Log.d("XXX", "fi tunel: " + posicioGraellaTipusCasella(TipusCasella.POSICIO_INICI_TUNEL));
-            return getPosicioEnPixels(posicioGraellaTipusCasella(TipusCasella.POSICIO_INICI_TUNEL));
+        if (esticALaBocaDelTunel(posGraella)) {
+            if (getCella(posGraella) == TipusCasella.POSICIO_INICI_TUNEL) {
+                return getPosicioEnPixels(posicioGraellaDelTunel(TipusCasella.POSICIO_FI_TUNEL));
+            } else if (getCella(posGraella) == TipusCasella.POSICIO_FI_TUNEL) {
+                return getPosicioEnPixels(posicioGraellaDelTunel(TipusCasella.POSICIO_FI_TUNEL));
+            }
         }
         return null;
     }
 
 
 
-    public Point posicioGraellaTipusCasella (TipusCasella tipusCasella) {
-        Point posicio = new Point(0, 0);
-        Log.d("XXX", "posicio: " + posicio);
-        Log.d("XXX", "tipusCasella: " + tipusCasella);
-        for (int x = 0; x < columnes; x++, posicio.x += midaCella){
-            posicio.y = 0;
-            for (int y = 0; y < files; y++, posicio.y += midaCella) {
+    public Point posicioGraellaDelTunel (TipusCasella tipusCasella) {
+        for (int x = 0; x < columnes; x++){
+            for (int y = 0; y < files; y++) {
                 if (escenari[y][x] == tipusCasella.codi) {
-                    Log.d("XXX", "posicio x: " + x + " - posicio y: " + y);
                     return new Point(x, y);
                 }
             }
