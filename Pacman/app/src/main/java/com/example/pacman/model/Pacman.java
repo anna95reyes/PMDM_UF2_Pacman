@@ -49,9 +49,6 @@ public class Pacman extends Sprite {
 
             }*/
 
-            Log.d("XXX", "getCella: " + mEscenari.getCella(mEscenari.getPosicioALaGraella(mPosicio)));
-            Log.d("XXX", "getPosicioALaGraella: " + mEscenari.getPosicioALaGraella(mPosicio));
-
             if (mEscenari.esticALaBocaDelTunel(mEscenari.getPosicioALaGraella(mPosicio))) {
                 mPosicio = mEscenari.creuarTunel(mEscenari.getPosicioALaGraella(mPosicio));
             }

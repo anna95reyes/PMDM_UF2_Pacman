@@ -130,11 +130,10 @@ public class Escenari extends GameObject {
 
     public boolean emPucMoureEnDireccio(PointF posicioPixels, Point direccio){
         Point casella = getPosicioALaGraella(posicioPixels);
-        /*if (casella.x == 0 && direccio.x == -1 || casella.x == escenari[0].length-1 && direccio.x == 1
+        if (casella.x == 0 && direccio.x == -1 || casella.x == escenari[0].length-1 && direccio.x == 1
         || casella.y == 0 && direccio.y == -1 || casella.y == escenari.length-1 && direccio.y == 1) {
-            Log.d("XXX", "entro");
             return false;
-        }*/
+        }
         casella.x += direccio.x;
         casella.y += direccio.y;
         return getCella(casella) != TipusCasella.PARET;
@@ -143,7 +142,6 @@ public class Escenari extends GameObject {
     public Boolean esticALaBocaDelTunel(Point posGraella){
         if (getCella(posGraella) == TipusCasella.POSICIO_INICI_TUNEL ||
                 getCella(posGraella) == TipusCasella.POSICIO_INICI_TUNEL) {
-            Log.d("XXX", "estic a un tunel");
             return true;
         }
         return false;

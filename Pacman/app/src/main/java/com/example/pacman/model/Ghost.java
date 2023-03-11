@@ -1,6 +1,7 @@
 package com.example.pacman.model;
 
 import android.graphics.Point;
+import android.util.Log;
 
 import com.example.pacman.DemoSurfaceView;
 import com.example.pacman.R;
@@ -19,8 +20,6 @@ public abstract class Ghost extends Sprite {
     public Ghost(DemoSurfaceView view, int width, int height, int midaCella) {
         super(view, width, height, midaCella, midaCella);
 
-        //mPosicio = mEscenari.getPosicioIniciBlinky();
-
         pasEnPixels = midaCella / 10.0f;
 
         modeEspantat(false);
@@ -31,7 +30,7 @@ public abstract class Ghost extends Sprite {
     }
 
     @Override
-    public abstract List<Integer> getSprites(); /*{
+    public List<Integer> getSprites() {
         List<Integer> sprites = new ArrayList<>();
         sprites.add(R.drawable.blinky);
         sprites.add(R.drawable.pinky);
@@ -39,7 +38,7 @@ public abstract class Ghost extends Sprite {
         sprites.add(R.drawable.clyde);
         sprites.add(R.drawable.espantat);
         return sprites;
-    }*/
+    }
 
     protected MovimentJoystick mMove = new MovimentJoystick(1, 0);
 
@@ -49,12 +48,16 @@ public abstract class Ghost extends Sprite {
 
         if (mEscenari.esticALaCasella(this.mPosicio)){
 
+            if (mEscenari.esticALaBocaDelTunel(mEscenari.getPosicioALaGraella(mPosicio))) {
+                mPosicio = mEscenari.creuarTunel(mEscenari.getPosicioALaGraella(mPosicio));
+            }
             // mirar si he de canviar de direccio
             this.mMove = recalculaDireccio();
+
         }
 
-        //this.mPosicio.x += mMove.x * pasEnPixels;
-        //this.mPosicio.y += mMove.y * pasEnPixels;
+        this.mPosicio.x += mMove.x * pasEnPixels;
+        this.mPosicio.y += mMove.y * pasEnPixels;
     }
 
     protected abstract MovimentJoystick recalculaDireccio(); /*{
