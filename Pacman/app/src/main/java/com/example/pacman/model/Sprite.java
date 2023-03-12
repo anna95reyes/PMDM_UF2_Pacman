@@ -62,9 +62,6 @@ public abstract class Sprite extends GameObject {
                 (int)mPosicio.x + mWidthScreen, (int)mPosicio.y + mHeightScreen);
 
         canvas.save();
-        //canvas.scale(-1, 1, (int)(mPosicio.x + mWidthScreen * 0.5), (int)(mPosicio.y + mWidthScreen * 0.5));
-        /*canvas.rotate(90, (int)(mPosicio.x + mWidthScreen * 0.5), (int)(mPosicio.y + mWidthScreen * 0.5));*/
-
         canvas.drawBitmap(mBitmapSprites.get(mSpriteActiu), src, dst, new Paint());
         canvas.restore();
     }

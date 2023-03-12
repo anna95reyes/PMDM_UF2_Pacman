@@ -76,6 +76,7 @@ public class Pacman extends Sprite {
 
     @Override
     public void onDraw(Canvas canvas) {
+        //ES SOBRESCRIU, no crido al onDraw del pare
         src = new Rect(mWidth * (mFrameActiu), 0, mWidth * (mFrameActiu + 1), mHeight);
         dst = new Rect((int)mPosicio.x, (int)mPosicio.y,
                 (int)mPosicio.x + mWidthScreen, (int)mPosicio.y + mHeightScreen);
@@ -88,10 +89,6 @@ public class Pacman extends Sprite {
     }
 
     private void rotarSegonsDireccio(Canvas canvas) {
-
-
-        Log.d("XXX", "direccio: " + mMove);
-
         if (ultimMoviment.x == 1 && ultimMoviment.y == 0) {
             canvas.scale(1, 1, (int) (mPosicio.x + mWidthScreen * 0.5), (int) (mPosicio.y + mWidthScreen * 0.5));
         } else if (ultimMoviment.x == -1 && ultimMoviment.y == 0) {
@@ -101,10 +98,5 @@ public class Pacman extends Sprite {
         } else if (ultimMoviment.x == 0 && ultimMoviment.y == -1) {
             canvas.rotate(-90, (int)(mPosicio.x + mWidthScreen * 0.5), (int)(mPosicio.y + mWidthScreen * 0.5));
         }
-
-        /*
-        canvas.scale(-1, 1, (int)(mPosicio.x + mWidthScreen * 0.5), (int)(mPosicio.y + mWidthScreen * 0.5));
-        /*canvas.rotate(90, (int)(mPosicio.x + mWidthScreen * 0.5), (int)(mPosicio.y + mWidthScreen * 0.5));
-         */
     }
 }
