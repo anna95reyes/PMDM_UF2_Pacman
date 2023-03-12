@@ -30,15 +30,7 @@ public abstract class Ghost extends Sprite {
     }
 
     @Override
-    public List<Integer> getSprites() {
-        List<Integer> sprites = new ArrayList<>();
-        sprites.add(R.drawable.blinky);
-        sprites.add(R.drawable.pinky);
-        sprites.add(R.drawable.inky);
-        sprites.add(R.drawable.clyde);
-        sprites.add(R.drawable.espantat);
-        return sprites;
-    }
+    public abstract List<Integer> getSprites();
 
     protected MovimentJoystick mMove = new MovimentJoystick(1, 0);
 
@@ -60,34 +52,5 @@ public abstract class Ghost extends Sprite {
         this.mPosicio.y += mMove.y * pasEnPixels;
     }
 
-    protected abstract MovimentJoystick recalculaDireccio(); /*{
-
-        boolean canviDireccio = false;
-
-        // cas 1: me la fotre si continuo aixi
-        boolean xoco = !mEscenari.emPucMoureEnDireccio(mPosicio, mMove.getPoint());
-        if (xoco) {
-            canviDireccio = true;
-        }
-        // cas 2: estic a una cruilla amb nous camins perpendiculars
-        List<Point> direccionsPossibles = new ArrayList<>();
-        for (int i = 0; i < mDireccions.length; i++){
-            if (mEscenari.emPucMoureEnDireccio(mPosicio, mDireccions[i])) {
-                direccionsPossibles.add(mDireccions[i]);
-            }
-
-        }
-        if (!xoco) {
-            canviDireccio = direccionsPossibles.size()>2; //hi ha mes de dos direccions
-        }
-
-        if (canviDireccio){
-            int idx = (int)(Math.random() * direccionsPossibles.size());
-            Point p = direccionsPossibles.get(idx);
-            return new MovimentJoystick(p.x, p.y);
-        }
-
-        return mMove; //no canviem direccio
-
-    }*/
+    protected abstract MovimentJoystick recalculaDireccio();
 }

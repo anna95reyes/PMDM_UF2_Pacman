@@ -21,6 +21,8 @@ public class Escenari extends GameObject {
     private static final int PUNTUACIO_MENJAR_SUPERCOCO = 50;
     private static final int PUNTUACIO_MENJAR_FANTASMA = 200;
 
+    private static final int MAX_VIDES = 3;
+
     private int midaCella;
     private int files;
     private int columnes;
@@ -30,6 +32,7 @@ public class Escenari extends GameObject {
     private Canvas mCanvas;
     private int mMida;
     private int mPuntuacio;
+    private int mVides;
 
     private HashMap<Integer, TipusCasella> tipusCasella;
 
@@ -76,11 +79,12 @@ public class Escenari extends GameObject {
         midaCella = mMida / columnes;
 
         mPuntuacio = 0;
+        mVides = MAX_VIDES;
 
         //inicialitzacio de pintures
         pParet = new Paint();
         pParet.setColor(view.getResources().getColor(R.color.pared));
-        pParet.setStrokeWidth(5);
+        pParet.setStrokeWidth(6);
         pParet.setStyle(Paint.Style.STROKE);
 
         pGroga = new Paint();
@@ -159,7 +163,6 @@ public class Escenari extends GameObject {
     }
 
 
-
     public Point posicioGraellaDelTunel (TipusCasella tipusCasella) {
         for (int x = 0; x < columnes; x++){
             for (int y = 0; y < files; y++) {
@@ -191,11 +194,10 @@ public class Escenari extends GameObject {
         Log.d("XXX", "puntuacio: " + mPuntuacio);
     }
 
-
     @Override
     public void onDraw(Canvas canvas) {
 
-        canvas.drawBitmap(mBackground, 0,0 , pParet);
+        canvas.drawBitmap(mBackground, 0, 0, pParet);
 
         Point posicio = new Point(0, 0);
         for (int x = 0; x < columnes; x++, posicio.x += midaCella){
@@ -299,17 +301,6 @@ public class Escenari extends GameObject {
 
     }
 
-    /*public PointF getPosicioIniciGhost() {
-
-        for (int x = 0; x < columnes; x++){
-            for (int y = 0; y < files; y++) {
-                if (escenari[y][x] != TipusCasella.PARET.ordinal())
-                    return getPosicioEnPixels(new Point(x, y));
-            }
-        }
-        throw new RuntimeException("Quina merda de mapa... no té cap camí!!!");
-    }*/
-
     public PointF getPosicioInici(int posicio) {
 
         for (int x = 0; x < columnes; x++){
@@ -347,4 +338,6 @@ public class Escenari extends GameObject {
     public int getMidaCella() {
         return midaCella;
     }
+
+    public int getVides() {return mVides;}
 }

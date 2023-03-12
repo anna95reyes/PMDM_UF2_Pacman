@@ -1,7 +1,10 @@
 package com.example.pacman.model;
 
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.util.Log;
 
 import com.example.pacman.DemoSurfaceView;
@@ -34,20 +37,18 @@ public class Pacman extends Sprite {
     public List<Integer> getSprites() {
         List<Integer> sprites = new ArrayList<>();
         sprites.add(R.drawable.pacman);
+        sprites.add(R.drawable.pacman);
         return sprites;
     }
 
     private MovimentJoystick mMove = new MovimentJoystick(0, 0);
+    private MovimentJoystick ultimMoviment = new MovimentJoystick(0, 0);
 
     @Override
     public void tick() {
         super.tick();
 
         if (mEscenari.esticALaCasella(this.mPosicio)){
-
-            /*if (mEscenari.getCella(mEscenari.getPosicioALaGraella(mPosicio)).ordinal() == 700) {
-
-            }*/
 
             if (mEscenari.esticALaBocaDelTunel(mEscenari.getPosicioALaGraella(mPosicio))) {
                 mPosicio = mEscenari.creuarTunel(mEscenari.getPosicioALaGraella(mPosicio));
@@ -57,6 +58,7 @@ public class Pacman extends Sprite {
                 MovimentJoystick direccioDemanada = mView.getMovimentJoystick();
                 if (mEscenari.emPucMoureEnDireccio(mPosicio, new Point(direccioDemanada.x, direccioDemanada.y))) {
                     this.mMove = direccioDemanada;
+                    ultimMoviment = mMove;
                 }
             }
             // el joystic no te cap moviment, mantenim la direccio (si es posible)
@@ -72,4 +74,37 @@ public class Pacman extends Sprite {
         this.mPosicio.y += mMove.y * pasEnPixels;
     }
 
+    @Override
+    public void onDraw(Canvas canvas) {
+        src = new Rect(mWidth * (mFrameActiu), 0, mWidth * (mFrameActiu + 1), mHeight);
+        dst = new Rect((int)mPosicio.x, (int)mPosicio.y,
+                (int)mPosicio.x + mWidthScreen, (int)mPosicio.y + mHeightScreen);
+
+        canvas.save();
+        rotarSegonsDireccio(canvas);
+        canvas.drawBitmap(mBitmapSprites.get(mSpriteActiu), src, dst, new Paint());
+        canvas.restore();
+
+    }
+
+    private void rotarSegonsDireccio(Canvas canvas) {
+
+
+        Log.d("XXX", "direccio: " + mMove);
+
+        if (ultimMoviment.x == 1 && ultimMoviment.y == 0) {
+            canvas.scale(1, 1, (int) (mPosicio.x + mWidthScreen * 0.5), (int) (mPosicio.y + mWidthScreen * 0.5));
+        } else if (ultimMoviment.x == -1 && ultimMoviment.y == 0) {
+            canvas.scale(-1, 1, (int) (mPosicio.x + mWidthScreen * 0.5), (int) (mPosicio.y + mWidthScreen * 0.5));
+        } else if (ultimMoviment.x == 0 && ultimMoviment.y == 1) {
+            canvas.rotate(90, (int)(mPosicio.x + mWidthScreen * 0.5), (int)(mPosicio.y + mWidthScreen * 0.5));
+        } else if (ultimMoviment.x == 0 && ultimMoviment.y == -1) {
+            canvas.rotate(-90, (int)(mPosicio.x + mWidthScreen * 0.5), (int)(mPosicio.y + mWidthScreen * 0.5));
+        }
+
+        /*
+        canvas.scale(-1, 1, (int)(mPosicio.x + mWidthScreen * 0.5), (int)(mPosicio.y + mWidthScreen * 0.5));
+        /*canvas.rotate(90, (int)(mPosicio.x + mWidthScreen * 0.5), (int)(mPosicio.y + mWidthScreen * 0.5));
+         */
+    }
 }
