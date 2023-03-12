@@ -174,7 +174,7 @@ public class Escenari extends GameObject {
         return null;
     }
 
-    public Boolean guanyarPartida () {
+    public Boolean guanyoPartida () {
         for (int x = 0; x < columnes; x++){
             for (int y = 0; y < files; y++) {
                 if (escenari[y][x] == TipusCasella.COCO.codi || escenari[y][x] == TipusCasella.SUPERCOCO.codi) {
