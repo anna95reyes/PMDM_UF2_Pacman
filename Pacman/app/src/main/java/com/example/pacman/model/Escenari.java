@@ -174,6 +174,17 @@ public class Escenari extends GameObject {
         return null;
     }
 
+    public Boolean guanyarPartida () {
+        for (int x = 0; x < columnes; x++){
+            for (int y = 0; y < files; y++) {
+                if (escenari[y][x] == TipusCasella.COCO.codi || escenari[y][x] == TipusCasella.SUPERCOCO.codi) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     // Retornem true NOMES quan el personatge esta clavat dins de la cel·la.
     // En aquest moment pot fer girs i es controlen col·lisions
     public boolean esticALaCasella(PointF posicioPixels){
