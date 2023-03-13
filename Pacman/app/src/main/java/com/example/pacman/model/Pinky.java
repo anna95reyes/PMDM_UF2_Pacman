@@ -54,4 +54,5 @@ public class Pinky extends Ghost {
         return mMove; //no canviem direccio
 
     }
+
 }

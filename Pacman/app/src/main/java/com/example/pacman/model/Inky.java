@@ -54,4 +54,5 @@ public class Inky extends Ghost {
         return mMove; //no canviem direccio
 
     }
+
 }
