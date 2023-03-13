@@ -39,6 +39,12 @@ public class Escenari extends GameObject {
     private int mPuntuacio;
     private int mVides;
 
+    private PointF mPosicioIniciPacman;
+    private PointF mPosicioIniciBlinky;
+    private PointF mPosicioIniciClyde;
+    private PointF mPosicioIniciPinky;
+    private PointF mPosicioIniciInky;
+
     private HashMap<Integer, TipusCasella> tipusCasella;
 
     private static final int escenari[][] = {
@@ -85,6 +91,12 @@ public class Escenari extends GameObject {
 
         mPuntuacio = 0;
         mVides = MAX_VIDES;
+
+        mPosicioIniciPacman = new PointF();
+        mPosicioIniciBlinky = new PointF();
+        mPosicioIniciClyde = new PointF();
+        mPosicioIniciPinky = new PointF();
+        mPosicioIniciInky = new PointF();
 
         //inicialitzacio de pintures
         pParet = new Paint();
@@ -172,7 +184,6 @@ public class Escenari extends GameObject {
         return null;
     }
 
-
     public Point posicioGraellaDelTunel (TipusCasella tipusCasella) {
         for (int x = 0; x < columnes; x++){
             for (int y = 0; y < files; y++) {
@@ -239,6 +250,12 @@ public class Escenari extends GameObject {
         yScore = yScore - 60;
         dibuixarVides(canvas, new PointF(xScore, yScore));
 
+    }
+
+    public void xocoAmbFantasmes(Point posicioPacman){
+        for(GameObject b: mView.GameObjects()){
+            //TODO
+        }
     }
 
     public void inicialitzarEscenari(Canvas canvas) {
@@ -344,7 +361,7 @@ public class Escenari extends GameObject {
         for (int x = 0; x < columnes; x++){
             for (int y = 0; y < files; y++) {
                 if (escenari[y][x] == posicio) {
-                    escenari[y][x] = TipusCasella.COCO.codi;
+                     escenari[y][x]= TipusCasella.COCO.codi;
                     return getPosicioEnPixels(new Point(x, y));
                 }
 
@@ -354,23 +371,28 @@ public class Escenari extends GameObject {
     }
 
     public PointF getPosicioIniciPacman() {
-        return getPosicioInici(TipusCasella.POSICIO_INICI_PACMAN.codi);
+        mPosicioIniciPacman = getPosicioInici(TipusCasella.POSICIO_INICI_PACMAN.codi);
+        return mPosicioIniciPacman;
     }
 
     public PointF getPosicioIniciBlinky() {
-        return getPosicioInici(TipusCasella.POSICIO_INICI_BLINKY.codi);
+        mPosicioIniciBlinky =  getPosicioInici(TipusCasella.POSICIO_INICI_BLINKY.codi);
+        return mPosicioIniciBlinky;
     }
 
     public PointF getPosicioIniciClyde() {
-        return getPosicioInici(TipusCasella.POSICIO_INICI_CLYDE.codi);
+        mPosicioIniciClyde = getPosicioInici(TipusCasella.POSICIO_INICI_CLYDE.codi);
+        return mPosicioIniciClyde;
     }
 
     public PointF getPosicioIniciPinky() {
-        return getPosicioInici(TipusCasella.POSICIO_INICI_PINKY.codi);
+        mPosicioIniciPinky = getPosicioInici(TipusCasella.POSICIO_INICI_PINKY.codi);
+        return mPosicioIniciPinky;
     }
 
     public PointF getPosicioIniciInky() {
-        return getPosicioInici(TipusCasella.POSICIO_INICI_INKY.codi);
+        mPosicioIniciInky = getPosicioInici(TipusCasella.POSICIO_INICI_INKY.codi);
+        return mPosicioIniciInky;
     }
 
     public int getMidaCella() {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.media.MediaPlayer;
 import android.util.AttributeSet;
@@ -123,5 +124,9 @@ public class DemoSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     public Escenari getEscenari() {
         return mEscenari;
+    }
+
+    public List<GameObject> GameObjects() {
+        return mGameObjects;
     }
 }
