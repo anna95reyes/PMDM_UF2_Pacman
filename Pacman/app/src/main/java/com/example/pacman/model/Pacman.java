@@ -3,9 +3,7 @@ package com.example.pacman.model;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.PointF;
 import android.graphics.Rect;
-import android.util.Log;
 
 import com.example.pacman.DemoSurfaceView;
 import com.example.pacman.R;
@@ -26,17 +24,11 @@ public class Pacman extends Sprite {
 
         pasEnPixels = midaCella / 10.0f;
 
-        modeEspantat(false);
-    }
-
-    public void modeEspantat(boolean esticCagat) {
-        setSpriteActiu(esticCagat ? 1 : 0);
     }
 
     @Override
     public List<Integer> getSprites() {
         List<Integer> sprites = new ArrayList<>();
-        sprites.add(R.drawable.pacman);
         sprites.add(R.drawable.pacman);
         return sprites;
     }
@@ -67,6 +59,8 @@ public class Pacman extends Sprite {
             }
 
             mEscenari.menjarCocos(mEscenari.getPosicioALaGraella(mPosicio));
+
+            mEscenari.xocoAmbFantasmes(mEscenari.getPosicioALaGraella(mPosicio));
 
         }
 

@@ -1,12 +1,9 @@
 package com.example.pacman.model;
 
 import android.graphics.Point;
-import android.util.Log;
 
 import com.example.pacman.DemoSurfaceView;
-import com.example.pacman.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Ghost extends Sprite {
@@ -14,6 +11,7 @@ public abstract class Ghost extends Sprite {
     //Distancia en pixels recorreguda per ticks
 
     protected float pasEnPixels;
+    protected boolean mEsticCagat;
 
     protected Point mPosObjectiu = new Point(4, 8);
 
@@ -22,12 +20,15 @@ public abstract class Ghost extends Sprite {
 
         pasEnPixels = midaCella / 10.0f;
 
-        modeEspantat(false);
+        setModeEspantat(false);
     }
 
-    public void modeEspantat(boolean esticCagat) {
+    public void setModeEspantat(boolean esticCagat) {
+        mEsticCagat = esticCagat;
         setSpriteActiu(esticCagat ? 1 : 0);
     }
+
+    public Boolean getModeEspantat() { return mEsticCagat;}
 
     @Override
     public abstract List<Integer> getSprites();

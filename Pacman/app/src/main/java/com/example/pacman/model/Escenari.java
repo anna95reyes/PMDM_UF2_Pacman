@@ -1,6 +1,5 @@
 package com.example.pacman.model;
 
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -8,8 +7,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PointF;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import com.example.pacman.DemoSurfaceView;
@@ -222,6 +219,7 @@ public class Escenari extends GameObject {
         } else if (getCella(posGraella) == TipusCasella.SUPERCOCO) {
             mPuntuacio += PUNTUACIO_MENJAR_SUPERCOCO;
             escenari[posGraella.y][posGraella.x] = TipusCasella.CAMI.codi;
+            espantarFantasmes();
         }
     }
 
@@ -252,10 +250,51 @@ public class Escenari extends GameObject {
 
     }
 
-    public void xocoAmbFantasmes(Point posicioPacman){
+    public void espantarFantasmes() {
         for(GameObject b: mView.GameObjects()){
             //TODO
+            if (b instanceof Ghost) {
+                //fantasmes
+                Ghost ghost = (Ghost) b;
+                ghost.setModeEspantat(true);
+            }
         }
+    }
+
+    public void xocoAmbFantasmes(Point posicioPacman){
+        for(GameObject b: mView.GameObjects()){
+            if (b instanceof Ghost) {
+                //fantasmes
+                Ghost ghost = (Ghost) b;
+                Point posicioGhost = getPosicioALaGraella(ghost.mPosicio);
+                if (posicioPacman.x == posicioGhost.x && posicioPacman.y == posicioGhost.y) {
+                    Log.d("XXX", "XOCO!! Pacman: " + posicioPacman + " - Ghost: " + posicioGhost);
+                    if (ghost.getModeEspantat()) {
+                        menjoFantasmaEspantat(ghost);
+                    }
+                }
+            }
+        }
+    }
+
+    public void menjoFantasmaEspantat(Ghost ghost){
+        PointF posicioGhostEnGraella = ghost.mPosicio;
+
+        if (ghost instanceof Blinky) {
+            posicioGhostEnGraella.x = mPosicioIniciBlinky.x;
+            posicioGhostEnGraella.y = mPosicioIniciBlinky.y;
+        } else if (ghost instanceof Clyde) {
+            posicioGhostEnGraella.x = mPosicioIniciClyde.x;
+            posicioGhostEnGraella.y = mPosicioIniciClyde.y;
+        } else if (ghost instanceof Inky) {
+            posicioGhostEnGraella.x = mPosicioIniciInky.x;
+            posicioGhostEnGraella.y = mPosicioIniciInky.y;
+        } else if (ghost instanceof Pinky) {
+            posicioGhostEnGraella.x = mPosicioIniciPinky.x;
+            posicioGhostEnGraella.y = mPosicioIniciPinky.y;
+        }
+
+
     }
 
     public void inicialitzarEscenari(Canvas canvas) {
