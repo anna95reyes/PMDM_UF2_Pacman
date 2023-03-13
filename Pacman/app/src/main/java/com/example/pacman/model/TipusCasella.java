@@ -10,8 +10,8 @@ public enum TipusCasella {
     POSICIO_INICI_CLYDE(602),
     POSICIO_INICI_PINKY(603),
     POSICIO_INICI_INKY(604),
-    POSICIO_INICI_TUNEL(700),
-    POSICIO_FI_TUNEL(701);
+    POSICIO_TUNEL_ESQ(700),
+    POSICIO_TUNEL_DRE(701);
 
     public int codi;
     TipusCasella (int codi) {

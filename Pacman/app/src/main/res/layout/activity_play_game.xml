@@ -20,12 +20,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btnExit"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_centerInParent="true"
         android:layout_marginBottom="10dp"
         android:backgroundTint="@color/transparent"
-        android:textSize="30dp"
-        android:text="Start Game"/>
+        android:text="Start Game"
+        android:textSize="30dp" />
 
     <Button
         android:id="@+id/btnExit"

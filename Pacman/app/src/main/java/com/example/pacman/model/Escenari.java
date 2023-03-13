@@ -1,11 +1,15 @@
 package com.example.pacman.model;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import com.example.pacman.DemoSurfaceView;
@@ -28,6 +32,7 @@ public class Escenari extends GameObject {
     private int columnes;
     private Paint pParet;
     private Paint pGroga;
+    private Paint pScore;
     private Bitmap mBackground;
     private Canvas mCanvas;
     private int mMida;
@@ -90,6 +95,11 @@ public class Escenari extends GameObject {
         pGroga = new Paint();
         pGroga.setColor(view.getResources().getColor(R.color.coco));
 
+        pScore = new Paint();
+        pScore.setColor(view.getResources().getColor(R.color.white));
+        pScore.setTextSize(70);
+        pScore.setTextAlign(Paint.Align.CENTER);
+
         mBackground = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
         mCanvas = new Canvas(mBackground);
         inicialitzarEscenari(mCanvas);
@@ -108,8 +118,8 @@ public class Escenari extends GameObject {
         tipusCasella.put(TipusCasella.POSICIO_INICI_CLYDE.codi, TipusCasella.POSICIO_INICI_CLYDE);
         tipusCasella.put(TipusCasella.POSICIO_INICI_PINKY.codi, TipusCasella.POSICIO_INICI_PINKY);
         tipusCasella.put(TipusCasella.POSICIO_INICI_INKY.codi, TipusCasella.POSICIO_INICI_INKY);
-        tipusCasella.put(TipusCasella.POSICIO_INICI_TUNEL.codi, TipusCasella.POSICIO_INICI_TUNEL);
-        tipusCasella.put(TipusCasella.POSICIO_FI_TUNEL.codi, TipusCasella.POSICIO_FI_TUNEL);
+        tipusCasella.put(TipusCasella.POSICIO_TUNEL_ESQ.codi, TipusCasella.POSICIO_TUNEL_ESQ);
+        tipusCasella.put(TipusCasella.POSICIO_TUNEL_DRE.codi, TipusCasella.POSICIO_TUNEL_DRE);
     }
 
     // Donada la posicio en pixels d'un personatge ens retorna la posicio a la graella
@@ -144,8 +154,8 @@ public class Escenari extends GameObject {
     }
 
     public Boolean esticALaBocaDelTunel(Point posGraella){
-        if (getCella(posGraella) == TipusCasella.POSICIO_INICI_TUNEL ||
-                getCella(posGraella) == TipusCasella.POSICIO_INICI_TUNEL) {
+        if (getCella(posGraella) == TipusCasella.POSICIO_TUNEL_ESQ ||
+                getCella(posGraella) == TipusCasella.POSICIO_TUNEL_DRE) {
             return true;
         }
         return false;
@@ -153,10 +163,10 @@ public class Escenari extends GameObject {
 
     public PointF creuarTunel(Point posGraella) {
         if (esticALaBocaDelTunel(posGraella)) {
-            if (getCella(posGraella) == TipusCasella.POSICIO_INICI_TUNEL) {
-                return getPosicioEnPixels(posicioGraellaDelTunel(TipusCasella.POSICIO_FI_TUNEL));
-            } else if (getCella(posGraella) == TipusCasella.POSICIO_FI_TUNEL) {
-                return getPosicioEnPixels(posicioGraellaDelTunel(TipusCasella.POSICIO_FI_TUNEL));
+            if (getCella(posGraella) == TipusCasella.POSICIO_TUNEL_ESQ) {
+                return getPosicioEnPixels(posicioGraellaDelTunel(TipusCasella.POSICIO_TUNEL_DRE));
+            } else if (getCella(posGraella) == TipusCasella.POSICIO_TUNEL_DRE) {
+                return getPosicioEnPixels(posicioGraellaDelTunel(TipusCasella.POSICIO_TUNEL_ESQ));
             }
         }
         return null;
@@ -202,7 +212,6 @@ public class Escenari extends GameObject {
             mPuntuacio += PUNTUACIO_MENJAR_SUPERCOCO;
             escenari[posGraella.y][posGraella.x] = TipusCasella.CAMI.codi;
         }
-        Log.d("XXX", "puntuacio: " + mPuntuacio);
     }
 
     @Override
@@ -223,6 +232,13 @@ public class Escenari extends GameObject {
             }
         }
 
+        float xScore = ((midaCella * columnes) / 4);
+        float yScore = (midaCella * files) + ((mView.getHeight() - (midaCella * files)) / 2);
+        dibuixarScore(canvas, new PointF(xScore, yScore));
+        xScore = (((midaCella * columnes) / 4) * 3) - 140;
+        yScore = yScore - 60;
+        dibuixarVides(canvas, new PointF(xScore, yScore));
+
     }
 
     public void inicialitzarEscenari(Canvas canvas) {
@@ -238,7 +254,18 @@ public class Escenari extends GameObject {
         }
     }
 
+    private void dibuixarScore(Canvas canvas, PointF pixels) {
+        canvas.drawText("SCORE: " + mPuntuacio, pixels.x, pixels.y, pScore);
+    }
 
+    private void dibuixarVides(Canvas canvas, PointF pixels) {
+        Bitmap bitmap = BitmapFactory.decodeResource(mView.getResources(), R.drawable.vides);
+        for (int i = 0; i < mVides; i++) {
+            canvas.drawBitmap(bitmap, pixels.x, pixels.y, new Paint());
+            pixels.x += 100;
+        }
+
+    }
 
     private void dibuixarParet(Canvas canvas, Point p) {
 
