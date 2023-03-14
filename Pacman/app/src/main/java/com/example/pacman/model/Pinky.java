@@ -45,11 +45,15 @@ public class Pinky extends Ghost {
             canviDireccio = direccionsPossibles.size()>2; //hi ha mes de dos direccions
         }
 
-        if (canviDireccio){
-            int idx = (int)(Math.random() * direccionsPossibles.size());
-            Point p = direccionsPossibles.get(idx);
-            return new MovimentJoystick(p.x, p.y);
-        }
+        //if (getModeEspantat()) {
+            if (canviDireccio) {
+                int idx = (int) (Math.random() * direccionsPossibles.size());
+                Point p = direccionsPossibles.get(idx);
+                return new MovimentJoystick(p.x, p.y);
+            }
+        /*} else {
+
+        }*/
 
         return mMove; //no canviem direccio
 

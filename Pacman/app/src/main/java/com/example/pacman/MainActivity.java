@@ -2,10 +2,13 @@ package com.example.pacman;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static Activity mainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,5 +18,7 @@ public class MainActivity extends AppCompatActivity {
         MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.wakawaka);
         mediaPlayer.start();
         mediaPlayer.setLooping(true); //Per repetir l'audio
+
+        mainActivity = this;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.pacman.model;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -10,6 +11,8 @@ import android.graphics.PointF;
 import android.util.Log;
 
 import com.example.pacman.DemoSurfaceView;
+import com.example.pacman.MainActivity;
+import com.example.pacman.PlayGameActivity;
 import com.example.pacman.R;
 
 import java.util.HashMap;
@@ -17,12 +20,14 @@ import java.util.HashMap;
 public class Escenari extends GameObject {
 
     private static final float TOLERANCIA = 0.1f;
+    private static final int TOLERENCIA_PIXELS = 6;
 
     private static final int PUNTUACIO_MENJAR_COCO = 10;
     private static final int PUNTUACIO_MENJAR_SUPERCOCO = 50;
     private static final int PUNTUACIO_MENJAR_FANTASMA = 200;
 
     private static final int MAX_VIDES = 3;
+
 
     private int midaCella;
     private int files;
@@ -191,7 +196,7 @@ public class Escenari extends GameObject {
         return null;
     }
 
-    public Boolean guanyoPartida () {
+    public Boolean heGuanyatLaPartida () {
         for (int x = 0; x < columnes; x++){
             for (int y = 0; y < files; y++) {
                 if (escenari[y][x] == TipusCasella.COCO.codi || escenari[y][x] == TipusCasella.SUPERCOCO.codi) {
@@ -200,6 +205,19 @@ public class Escenari extends GameObject {
             }
         }
         return true;
+    }
+
+    public void guanyoPartida() {
+        if (heGuanyatLaPartida() && mVides > 0){
+            MainActivity.mainActivity.finish();
+        }
+    }
+
+    public void perdoPartida () {
+        //TODO: missatge Game Over
+        if (mVides == 0) {
+            MainActivity.mainActivity.finish();
+        }
     }
 
     // Retornem true NOMES quan el personatge esta clavat dins de la cel·la.
@@ -220,6 +238,7 @@ public class Escenari extends GameObject {
             escenari[posGraella.y][posGraella.x] = TipusCasella.CAMI.codi;
             espantarFantasmes();
         }
+        guanyoPartida();
     }
 
     @Override
@@ -260,17 +279,28 @@ public class Escenari extends GameObject {
         }
     }
 
-    public void xocoAmbFantasmes(Point posicioPacman){
+    public void xocoAmbFantasmes(PointF posicioPacman, Pacman pacman){
         for(GameObject b: mView.GameObjects()){
             if (b instanceof Ghost) {
                 //fantasmes
                 Ghost ghost = (Ghost) b;
-                Point posicioGhost = getPosicioALaGraella(ghost.mPosicio);
-                if (posicioPacman.x == posicioGhost.x && posicioPacman.y == posicioGhost.y) {
+                PointF posicioGhost = ghost.mPosicio;
+
+                double diferenciaX = Math.abs(posicioPacman.x - posicioGhost.x);
+                double diferenciaY = Math.abs(posicioPacman.y - posicioGhost.y);
+
+                if (diferenciaX >= 0 && diferenciaX <=TOLERENCIA_PIXELS && diferenciaY >= 0 && diferenciaY <=TOLERENCIA_PIXELS) {
                     if (ghost.getModeEspantat()) {
                         ghost.mPosicio = tornarFantasmaEspantatPosicioInicial(ghost);
                         ghost.setModeEspantat(false);
                         mPuntuacio += PUNTUACIO_MENJAR_FANTASMA;
+                    } else {
+                        pacman.mPosicio = getPosicioEnPixels(mPosicioIniciPacman);
+                        mVides--;
+                        if (mVides == 0) {
+                            perdoPartida();
+                        }
+
                     }
                 }
             }

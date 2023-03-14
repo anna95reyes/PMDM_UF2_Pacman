@@ -60,9 +60,10 @@ public class Pacman extends Sprite {
 
             mEscenari.menjarCocos(mEscenari.getPosicioALaGraella(mPosicio));
 
-            mEscenari.xocoAmbFantasmes(mEscenari.getPosicioALaGraella(mPosicio));
 
         }
+
+        mEscenari.xocoAmbFantasmes(mPosicio, this);
 
         this.mPosicio.x += mMove.x * pasEnPixels;
         this.mPosicio.y += mMove.y * pasEnPixels;
