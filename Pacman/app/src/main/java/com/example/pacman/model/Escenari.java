@@ -36,11 +36,11 @@ public class Escenari extends GameObject {
     private int mPuntuacio;
     private int mVides;
 
-    private PointF mPosicioIniciPacman;
-    private PointF mPosicioIniciBlinky;
-    private PointF mPosicioIniciClyde;
-    private PointF mPosicioIniciPinky;
-    private PointF mPosicioIniciInky;
+    private final Point mPosicioIniciPacman;
+    private final Point mPosicioIniciBlinky;
+    private final Point mPosicioIniciClyde;
+    private final Point mPosicioIniciPinky;
+    private final Point mPosicioIniciInky;
 
     private HashMap<Integer, TipusCasella> tipusCasella;
 
@@ -89,12 +89,6 @@ public class Escenari extends GameObject {
         mPuntuacio = 0;
         mVides = MAX_VIDES;
 
-        mPosicioIniciPacman = new PointF();
-        mPosicioIniciBlinky = new PointF();
-        mPosicioIniciClyde = new PointF();
-        mPosicioIniciPinky = new PointF();
-        mPosicioIniciInky = new PointF();
-
         //inicialitzacio de pintures
         pParet = new Paint();
         pParet.setColor(view.getResources().getColor(R.color.pared));
@@ -114,6 +108,11 @@ public class Escenari extends GameObject {
         inicialitzarEscenari(mCanvas);
 
         inicilitzarHashTipusCasella();
+        mPosicioIniciPacman = getPosicioALaGraella(getPosicioInici(TipusCasella.POSICIO_INICI_PACMAN.codi));
+        mPosicioIniciBlinky = getPosicioALaGraella(getPosicioInici(TipusCasella.POSICIO_INICI_BLINKY.codi));
+        mPosicioIniciClyde = getPosicioALaGraella(getPosicioInici(TipusCasella.POSICIO_INICI_CLYDE.codi));
+        mPosicioIniciPinky = getPosicioALaGraella(getPosicioInici(TipusCasella.POSICIO_INICI_PINKY.codi));
+        mPosicioIniciInky = getPosicioALaGraella(getPosicioInici(TipusCasella.POSICIO_INICI_INKY.codi));
     }
 
     private void inicilitzarHashTipusCasella() {
@@ -268,33 +267,28 @@ public class Escenari extends GameObject {
                 Ghost ghost = (Ghost) b;
                 Point posicioGhost = getPosicioALaGraella(ghost.mPosicio);
                 if (posicioPacman.x == posicioGhost.x && posicioPacman.y == posicioGhost.y) {
-                    Log.d("XXX", "XOCO!! Pacman: " + posicioPacman + " - Ghost: " + posicioGhost);
                     if (ghost.getModeEspantat()) {
-                        menjoFantasmaEspantat(ghost);
+                        ghost.mPosicio = tornarFantasmaEspantatPosicioInicial(ghost);
+                        ghost.setModeEspantat(false);
+                        mPuntuacio += PUNTUACIO_MENJAR_FANTASMA;
                     }
                 }
             }
         }
     }
 
-    public void menjoFantasmaEspantat(Ghost ghost){
-        PointF posicioGhostEnGraella = ghost.mPosicio;
+    public PointF tornarFantasmaEspantatPosicioInicial(Ghost ghost){
 
         if (ghost instanceof Blinky) {
-            posicioGhostEnGraella.x = mPosicioIniciBlinky.x;
-            posicioGhostEnGraella.y = mPosicioIniciBlinky.y;
+            return getPosicioEnPixels(mPosicioIniciBlinky);
         } else if (ghost instanceof Clyde) {
-            posicioGhostEnGraella.x = mPosicioIniciClyde.x;
-            posicioGhostEnGraella.y = mPosicioIniciClyde.y;
+            return getPosicioEnPixels(mPosicioIniciClyde);
         } else if (ghost instanceof Inky) {
-            posicioGhostEnGraella.x = mPosicioIniciInky.x;
-            posicioGhostEnGraella.y = mPosicioIniciInky.y;
+            return getPosicioEnPixels(mPosicioIniciInky);
         } else if (ghost instanceof Pinky) {
-            posicioGhostEnGraella.x = mPosicioIniciPinky.x;
-            posicioGhostEnGraella.y = mPosicioIniciPinky.y;
+            return getPosicioEnPixels(mPosicioIniciPinky);
         }
-
-
+        return null;
     }
 
     public void inicialitzarEscenari(Canvas canvas) {
@@ -410,28 +404,24 @@ public class Escenari extends GameObject {
     }
 
     public PointF getPosicioIniciPacman() {
-        mPosicioIniciPacman = getPosicioInici(TipusCasella.POSICIO_INICI_PACMAN.codi);
-        return mPosicioIniciPacman;
+        return getPosicioEnPixels(mPosicioIniciPacman);
+
     }
 
     public PointF getPosicioIniciBlinky() {
-        mPosicioIniciBlinky =  getPosicioInici(TipusCasella.POSICIO_INICI_BLINKY.codi);
-        return mPosicioIniciBlinky;
+        return getPosicioEnPixels(mPosicioIniciBlinky);
     }
 
     public PointF getPosicioIniciClyde() {
-        mPosicioIniciClyde = getPosicioInici(TipusCasella.POSICIO_INICI_CLYDE.codi);
-        return mPosicioIniciClyde;
+        return getPosicioEnPixels(mPosicioIniciClyde);
     }
 
     public PointF getPosicioIniciPinky() {
-        mPosicioIniciPinky = getPosicioInici(TipusCasella.POSICIO_INICI_PINKY.codi);
-        return mPosicioIniciPinky;
+        return getPosicioEnPixels(mPosicioIniciPinky);
     }
 
     public PointF getPosicioIniciInky() {
-        mPosicioIniciInky = getPosicioInici(TipusCasella.POSICIO_INICI_INKY.codi);
-        return mPosicioIniciInky;
+        return getPosicioEnPixels(mPosicioIniciInky);
     }
 
     public int getMidaCella() {

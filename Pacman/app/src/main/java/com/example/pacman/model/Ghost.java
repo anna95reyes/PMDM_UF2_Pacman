@@ -21,6 +21,7 @@ public abstract class Ghost extends Sprite {
         pasEnPixels = midaCella / 10.0f;
 
         setModeEspantat(false);
+
     }
 
     public void setModeEspantat(boolean esticCagat) {
@@ -44,6 +45,7 @@ public abstract class Ghost extends Sprite {
             if (mEscenari.esticALaBocaDelTunel(mEscenari.getPosicioALaGraella(mPosicio))) {
                 mPosicio = mEscenari.creuarTunel(mEscenari.getPosicioALaGraella(mPosicio));
             }
+
             // mirar si he de canviar de direccio
             this.mMove = recalculaDireccio();
 
