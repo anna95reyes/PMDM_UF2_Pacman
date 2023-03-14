@@ -6,7 +6,7 @@ import android.util.Log;
 public class SurfaceThread extends Thread{
 
 
-    private static final int FPS = 80; // 60; // frames per second
+    private static final int FPS = 60; // frames per second
     private int tempsFrame_Ns;
     private com.example.pacman.DemoSurfaceView mView;
     private boolean esticViu;

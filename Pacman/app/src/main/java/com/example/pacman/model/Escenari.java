@@ -1,6 +1,5 @@
 package com.example.pacman.model;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -8,12 +7,9 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PointF;
-import android.icu.util.ULocale;
-import android.util.Log;
 
 import com.example.pacman.DemoSurfaceView;
 import com.example.pacman.MainActivity;
-import com.example.pacman.PlayGameActivity;
 import com.example.pacman.R;
 
 import java.text.SimpleDateFormat;
@@ -30,7 +26,7 @@ public class Escenari extends GameObject {
     private static final int PUNTUACIO_MENJAR_SUPERCOCO = 50;
     private static final int PUNTUACIO_MENJAR_FANTASMA = 200;
 
-    private static final int MAX_VIDES = 3;
+    private static final int MAX_VIDES = 1;//3;
     private static final int TEMPS_FANTASMES_ESPANTATS_EN_SEGONS = 5;
 
     private int midaCella;
@@ -39,6 +35,7 @@ public class Escenari extends GameObject {
     private Paint pParet;
     private Paint pGroga;
     private Paint pScore;
+    private Paint pFiPartida;
     private Bitmap mBackground;
     private Canvas mCanvas;
     private int mMida;
@@ -114,6 +111,12 @@ public class Escenari extends GameObject {
         pScore.setColor(view.getResources().getColor(R.color.white));
         pScore.setTextSize(70);
         pScore.setTextAlign(Paint.Align.CENTER);
+
+        pFiPartida = new Paint();
+        pFiPartida.setColor(view.getResources().getColor(R.color.fi_partida));
+        pFiPartida.setTextSize(110);
+        pFiPartida.setFakeBoldText(true);
+        pFiPartida.setTextAlign(Paint.Align.CENTER);
 
         mBackground = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
         mCanvas = new Canvas(mBackground);
@@ -216,28 +219,31 @@ public class Escenari extends GameObject {
         return true;
     }
 
-    public void guanyoPartida() {
+    public void guanyoPartida(Canvas canvas, PointF pixels) {
         if (heGuanyatLaPartida() && mVides > 0){
-            //TODO: missatge WIN
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            MainActivity.mainActivity.finish();
+            dibuixarGuanyarOPerdreITornarEnrrere(canvas, pixels, "WIN!!");
         }
     }
 
-    public void perdoPartida () {
-        //TODO: missatge Game Over
+    public void perdoPartida (Canvas canvas, PointF pixels) {
+        if (mVides == 0) {
+            dibuixarGuanyarOPerdreITornarEnrrere(canvas, pixels, "GAME OVER!!");
+        }
+    }
+
+    private void dibuixarGuanyarOPerdreITornarEnrrere(Canvas canvas, PointF pixels, String text) {
+
+        canvas.drawText(text, pixels.x, pixels.y, pFiPartida);
+
         try {
-            Thread.sleep(2000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if (mVides == 0) {
-            MainActivity.mainActivity.finish();
-        }
+
+        MainActivity.mainActivity.finish();
+
+
     }
 
     // Retornem true NOMES quan el personatge esta clavat dins de la cel·la.
@@ -258,7 +264,6 @@ public class Escenari extends GameObject {
             escenari[posGraella.y][posGraella.x] = TipusCasella.CAMI.codi;
             espantarFantasmes();
         }
-        guanyoPartida();
     }
 
     @Override
@@ -285,6 +290,11 @@ public class Escenari extends GameObject {
         xScore = (((midaCella * columnes) / 4) * 3) - 140;
         yScore = yScore - 60;
         dibuixarVides(canvas, new PointF(xScore, yScore));
+
+        float xFiPartida = ((midaCella * columnes) / 2) - 10;
+        float yFiPartida = ((midaCella * files) / 2) - 30;
+        guanyoPartida(canvas, new PointF(xFiPartida, yFiPartida));
+        perdoPartida(canvas, new PointF(xFiPartida, yFiPartida));
 
     }
 
@@ -314,18 +324,11 @@ public class Escenari extends GameObject {
                     Calendar pasatElTemps = Calendar.getInstance();
                     pasatElTemps.setTime(tempsEsticCagat);
                     pasatElTemps.set(Calendar.SECOND, pasatElTemps.get(Calendar.SECOND) + TEMPS_FANTASMES_ESPANTATS_EN_SEGONS);
-                    /*pasatElTemps.set(tempsEsticCagat.getYear(), tempsEsticCagat.getMonth(), tempsEsticCagat.getDay(),
-                            tempsEsticCagat.getHours(), tempsEsticCagat.getMinutes(),
-                            tempsEsticCagat.getSeconds() + TEMPS_FANTASMES_ESPANTATS_EN_SEGONS);
-                     */
+
                     String d1 = mFormatter.format(pasatElTemps.getTime());
                     String d2 = mFormatter.format(Calendar.getInstance().getTime());
 
-                    Log.d("XXX", "pasatElTemps: " + mFormatter.format(pasatElTemps.getTime()));
-                    Log.d("XXX", "new Date(): " + mFormatter.format(Calendar.getInstance().getTime()));
-
-                    if (d1.compareTo(d2) == 0) {
-                        Log.d("XXX", "entro");
+                    if (d1.equals(d2)) {
                         ghost.setModeEspantat(false);
                     }
                 }
@@ -351,10 +354,6 @@ public class Escenari extends GameObject {
                     } else {
                         pacman.mPosicio = getPosicioEnPixels(mPosicioIniciPacman);
                         mVides--;
-                        if (mVides == 0) {
-                            perdoPartida();
-                        }
-
                     }
                 }
             }
