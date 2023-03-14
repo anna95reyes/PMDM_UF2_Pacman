@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.icu.util.ULocale;
 import android.util.Log;
 
 import com.example.pacman.DemoSurfaceView;
@@ -15,6 +16,9 @@ import com.example.pacman.MainActivity;
 import com.example.pacman.PlayGameActivity;
 import com.example.pacman.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 public class Escenari extends GameObject {
@@ -27,7 +31,7 @@ public class Escenari extends GameObject {
     private static final int PUNTUACIO_MENJAR_FANTASMA = 200;
 
     private static final int MAX_VIDES = 3;
-
+    private static final int TEMPS_FANTASMES_ESPANTATS_EN_SEGONS = 5;
 
     private int midaCella;
     private int files;
@@ -40,6 +44,7 @@ public class Escenari extends GameObject {
     private int mMida;
     private int mPuntuacio;
     private int mVides;
+    private Date tempsEsticCagat;
 
     private final Point mPosicioIniciPacman;
     private final Point mPosicioIniciBlinky;
@@ -48,6 +53,8 @@ public class Escenari extends GameObject {
     private final Point mPosicioIniciInky;
 
     private HashMap<Integer, TipusCasella> tipusCasella;
+
+    private SimpleDateFormat mFormatter;
 
     private static final int escenari[][] = {
             {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
@@ -72,10 +79,10 @@ public class Escenari extends GameObject {
             {0,	2,	0,	0,	0,	2,	0,	0,	0,	0,	0,	0,	0,	0,	2,	0,	0,	0,	2,	0},
             {0,	2,	2,	2,	2,	2,	2,	2,	2,	0,	0,	2,	2,	2,	2,	2,	2,	2,	2,	0},
             {0,	2,	0,	0,	0,	0,	0,	0,	2,	0,	0,	2,	0,	0,	0,	0,	0,	0,	2,	0},
-            {0,	2,	0,	0,	0,	0,	0,	0,	2,	0,	0,	2,	0,	0,	0,	0,	0,	0,	2,	0},
-            {0,	3,	2,	2,	0,	2,	2,	2,	2,	600,2,	2,	2,	2,	2,	0,	2,	2,	3,	0},
-            {0,	0,	0,	2,	0,	2,	0,	0,	0,	0,	0,	0,	0,	0,	2,	0,	2,	0,	0,	0},
-            {0,	0,	0,	2,	0,	2,	0,	0,	0,	0,	0,	0,	0,	0,	2,	0,	2,	0,	0,	0},
+            {0,	3,	0,	0,	0,	0,	0,	0,	2,	0,	0,	2,	0,	0,	0,	0,	0,	0,	3,	0},
+            {0,	2,	2,	2,	2,	2,	2,	2,	2,	600,2,	2,	2,	2,	2,	2,	2,	2,	2,	0},
+            {0,	0,	0,	0,	2,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	2,	0,	0,	0,	0},
+            {0,	0,	0,	0,	2,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	2,	0,	0,	0,	0},
             {0,	2,	2,	2,	2,	2,	2,	2,	2,	0,	0,	2,	2,	2,	2,	2,	2,	2,	2,	0},
             {0,	2,	0,	0,	0,	0,	0,	0,	2,	0,	0,	2,	0,	0,	0,	0,	0,	0,	2,	0},
             {0,	2,	0,	0,	0,	0,	0,	0,	2,	0,	0,	2,	0,	0,	0,	0,	0,	0,	2,	0},
@@ -118,6 +125,8 @@ public class Escenari extends GameObject {
         mPosicioIniciClyde = getPosicioALaGraella(getPosicioInici(TipusCasella.POSICIO_INICI_CLYDE.codi));
         mPosicioIniciPinky = getPosicioALaGraella(getPosicioInici(TipusCasella.POSICIO_INICI_PINKY.codi));
         mPosicioIniciInky = getPosicioALaGraella(getPosicioInici(TipusCasella.POSICIO_INICI_INKY.codi));
+
+        mFormatter = new SimpleDateFormat("HH:mm:ss.SS");
     }
 
     private void inicilitzarHashTipusCasella() {
@@ -209,12 +218,23 @@ public class Escenari extends GameObject {
 
     public void guanyoPartida() {
         if (heGuanyatLaPartida() && mVides > 0){
+            //TODO: missatge WIN
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             MainActivity.mainActivity.finish();
         }
     }
 
     public void perdoPartida () {
         //TODO: missatge Game Over
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         if (mVides == 0) {
             MainActivity.mainActivity.finish();
         }
@@ -275,6 +295,40 @@ public class Escenari extends GameObject {
                 //fantasmes
                 Ghost ghost = (Ghost) b;
                 ghost.setModeEspantat(true);
+                if (ghost.getModeEspantat()) {
+                    tempsEsticCagat = new Date();
+                }
+            }
+        }
+    }
+
+
+
+    public void fantasmesDeixenDeEstarEspantats() {
+        for(GameObject b: mView.GameObjects()){
+            //TODO
+            if (b instanceof Ghost) {
+                //fantasmes
+                Ghost ghost = (Ghost) b;
+                if (ghost.getModeEspantat()) {
+                    Calendar pasatElTemps = Calendar.getInstance();
+                    pasatElTemps.setTime(tempsEsticCagat);
+                    pasatElTemps.set(Calendar.SECOND, pasatElTemps.get(Calendar.SECOND) + TEMPS_FANTASMES_ESPANTATS_EN_SEGONS);
+                    /*pasatElTemps.set(tempsEsticCagat.getYear(), tempsEsticCagat.getMonth(), tempsEsticCagat.getDay(),
+                            tempsEsticCagat.getHours(), tempsEsticCagat.getMinutes(),
+                            tempsEsticCagat.getSeconds() + TEMPS_FANTASMES_ESPANTATS_EN_SEGONS);
+                     */
+                    String d1 = mFormatter.format(pasatElTemps.getTime());
+                    String d2 = mFormatter.format(Calendar.getInstance().getTime());
+
+                    Log.d("XXX", "pasatElTemps: " + mFormatter.format(pasatElTemps.getTime()));
+                    Log.d("XXX", "new Date(): " + mFormatter.format(Calendar.getInstance().getTime()));
+
+                    if (d1.compareTo(d2) == 0) {
+                        Log.d("XXX", "entro");
+                        ghost.setModeEspantat(false);
+                    }
+                }
             }
         }
     }

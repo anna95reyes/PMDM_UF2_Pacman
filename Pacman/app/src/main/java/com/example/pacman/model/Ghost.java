@@ -1,9 +1,11 @@
 package com.example.pacman.model;
 
+import android.graphics.Canvas;
 import android.graphics.Point;
 
 import com.example.pacman.DemoSurfaceView;
 
+import java.util.Date;
 import java.util.List;
 
 public abstract class Ghost extends Sprite {
@@ -54,6 +56,14 @@ public abstract class Ghost extends Sprite {
         this.mPosicio.x += mMove.x * pasEnPixels;
         this.mPosicio.y += mMove.y * pasEnPixels;
     }
+
+    @Override
+    public void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        mEscenari.fantasmesDeixenDeEstarEspantats();
+    }
+
+
 
     protected abstract MovimentJoystick recalculaDireccio();
 }
