@@ -62,19 +62,19 @@ public class Escenari extends GameObject {
             {0,	2,	2,	2,	2,	2,	2,	2,	2,	2,	2,	2,	2,	2,	2,	2,	2,	2,	2,	0},
             {0,	2,	0,	0,	0,	2,	0,	0,	0,	0,	0,	0,	0,	0,	2,	0,	0,	0,	2,	0},
             {0,	2,	0,	0,	0,	2,	0,	0,	0,	0,	0,	0,	0,	0,	2,	0,	0,	0,	2,	0},
-            {0,	2,	2,	2,	2,	2,	2,	2,	2,	0,	0,	2,	2,	2,	2,	2,	2,	2,	2,	0},
+            {700,2,	2,	2,	2,	2,	2,	2,	2,	0,	0,	2,	2,	2,	2,	2,	2,	2,	2,	701},
             {0,	2,	0,	0,	0,	0,	0,	0,	2,	0,	0,	2,	0,	0,	0,	0,	0,	0,	2,	0},
             {0,	2,	0,	0,	0,	0,	0,	0,	2,	0,	0,	2,	0,	0,	0,	0,	0,	0,	2,	0},
             {0,	2,	0,	0,	0,	2,	2,	2,	2,	2,	2,	2,	2,	2,	2,	0,	0,	0,	2,	0},
             {0,	2,	0,	0,	0,	2,	0,	0,	0,	0,	0,	0,	0,	0,	2,	0,	0,	0,	2,	0},
             {0,	2,	0,	0,	0,	2,	0,	0,	0,	0,	0,	0,	0,	0,	2,	0,	0,	0,	2,	0},
-            {700,2,	2,	2,	2,	601,2,	2,	2,	2,	2,	2,	2,	2,	602,2,	2,	2,	2,	701},
+            {702,2,	2,	2,	2,	601,2,	2,	2,	2,	2,	2,	2,	2,	602,2,	2,	2,	2,	703},
             {0,	2,	0,	0,	0,	2,	0,	0,	0,	0,	0,	0,	0,	0,	2,	0,	0,	0,	2,	0},
             {0,	2,	0,	0,	0,	2,	0,	0,	0,	0,	0,	0,	0,	0,	2,	0,	0,	0,	2,	0},
             {0,	2,	0,	0,	0,	603,2,	2,	2,	2,	2,	2,	2,	2,	604,0,	0,	0,	2,	0},
             {0,	2,	0,	0,	0,	2,	0,	0,	0,	0,	0,	0,	0,	0,	2,	0,	0,	0,	2,	0},
             {0,	2,	0,	0,	0,	2,	0,	0,	0,	0,	0,	0,	0,	0,	2,	0,	0,	0,	2,	0},
-            {0,	2,	2,	2,	2,	2,	2,	2,	2,	0,	0,	2,	2,	2,	2,	2,	2,	2,	2,	0},
+            {704,2,	2,	2,	2,	2,	2,	2,	2,	0,	0,	2,	2,	2,	2,	2,	2,	2,	2,	705},
             {0,	2,	0,	0,	0,	0,	0,	0,	2,	0,	0,	2,	0,	0,	0,	0,	0,	0,	2,	0},
             {0,	3,	0,	0,	0,	0,	0,	0,	2,	0,	0,	2,	0,	0,	0,	0,	0,	0,	3,	0},
             {0,	2,	2,	2,	2,	2,	2,	2,	2,	600,2,	2,	2,	2,	2,	2,	2,	2,	2,	0},
@@ -143,8 +143,12 @@ public class Escenari extends GameObject {
         tipusCasella.put(TipusCasella.POSICIO_INICI_CLYDE.codi, TipusCasella.POSICIO_INICI_CLYDE);
         tipusCasella.put(TipusCasella.POSICIO_INICI_PINKY.codi, TipusCasella.POSICIO_INICI_PINKY);
         tipusCasella.put(TipusCasella.POSICIO_INICI_INKY.codi, TipusCasella.POSICIO_INICI_INKY);
-        tipusCasella.put(TipusCasella.POSICIO_TUNEL_ESQ.codi, TipusCasella.POSICIO_TUNEL_ESQ);
-        tipusCasella.put(TipusCasella.POSICIO_TUNEL_DRE.codi, TipusCasella.POSICIO_TUNEL_DRE);
+        tipusCasella.put(TipusCasella.POSICIO_TUNEL1_ESQ.codi, TipusCasella.POSICIO_TUNEL1_ESQ);
+        tipusCasella.put(TipusCasella.POSICIO_TUNEL1_DRE.codi, TipusCasella.POSICIO_TUNEL1_DRE);
+        tipusCasella.put(TipusCasella.POSICIO_TUNEL2_ESQ.codi, TipusCasella.POSICIO_TUNEL2_ESQ);
+        tipusCasella.put(TipusCasella.POSICIO_TUNEL2_DRE.codi, TipusCasella.POSICIO_TUNEL2_DRE);
+        tipusCasella.put(TipusCasella.POSICIO_TUNEL3_ESQ.codi, TipusCasella.POSICIO_TUNEL3_ESQ);
+        tipusCasella.put(TipusCasella.POSICIO_TUNEL3_DRE.codi, TipusCasella.POSICIO_TUNEL3_DRE);
     }
 
     // Donada la posicio en pixels d'un personatge ens retorna la posicio a la graella
@@ -179,8 +183,12 @@ public class Escenari extends GameObject {
     }
 
     public Boolean esticALaBocaDelTunel(Point posGraella){
-        if (getCella(posGraella) == TipusCasella.POSICIO_TUNEL_ESQ ||
-                getCella(posGraella) == TipusCasella.POSICIO_TUNEL_DRE) {
+        if (getCella(posGraella) == TipusCasella.POSICIO_TUNEL1_ESQ ||
+                getCella(posGraella) == TipusCasella.POSICIO_TUNEL1_DRE ||
+                getCella(posGraella) == TipusCasella.POSICIO_TUNEL2_ESQ ||
+                getCella(posGraella) == TipusCasella.POSICIO_TUNEL2_DRE ||
+                getCella(posGraella) == TipusCasella.POSICIO_TUNEL3_ESQ ||
+                getCella(posGraella) == TipusCasella.POSICIO_TUNEL3_DRE) {
             return true;
         }
         return false;
@@ -188,10 +196,18 @@ public class Escenari extends GameObject {
 
     public PointF creuarTunel(Point posGraella) {
         if (esticALaBocaDelTunel(posGraella)) {
-            if (getCella(posGraella) == TipusCasella.POSICIO_TUNEL_ESQ) {
-                return getPosicioEnPixels(posicioGraellaDelTunel(TipusCasella.POSICIO_TUNEL_DRE));
-            } else if (getCella(posGraella) == TipusCasella.POSICIO_TUNEL_DRE) {
-                return getPosicioEnPixels(posicioGraellaDelTunel(TipusCasella.POSICIO_TUNEL_ESQ));
+            if (getCella(posGraella) == TipusCasella.POSICIO_TUNEL1_ESQ) {
+                return getPosicioEnPixels(posicioGraellaDelTunel(TipusCasella.POSICIO_TUNEL1_DRE));
+            } else if (getCella(posGraella) == TipusCasella.POSICIO_TUNEL1_DRE) {
+                return getPosicioEnPixels(posicioGraellaDelTunel(TipusCasella.POSICIO_TUNEL1_ESQ));
+            } else if (getCella(posGraella) == TipusCasella.POSICIO_TUNEL2_ESQ) {
+                return getPosicioEnPixels(posicioGraellaDelTunel(TipusCasella.POSICIO_TUNEL2_DRE));
+            } else if (getCella(posGraella) == TipusCasella.POSICIO_TUNEL2_DRE) {
+                return getPosicioEnPixels(posicioGraellaDelTunel(TipusCasella.POSICIO_TUNEL2_ESQ));
+            } else if (getCella(posGraella) == TipusCasella.POSICIO_TUNEL3_ESQ) {
+                return getPosicioEnPixels(posicioGraellaDelTunel(TipusCasella.POSICIO_TUNEL3_DRE));
+            } else if (getCella(posGraella) == TipusCasella.POSICIO_TUNEL3_DRE) {
+                return getPosicioEnPixels(posicioGraellaDelTunel(TipusCasella.POSICIO_TUNEL3_ESQ));
             }
         }
         return null;
