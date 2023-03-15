@@ -33,7 +33,7 @@ public class Pacman extends Sprite {
         return sprites;
     }
 
-    private MovimentJoystick mMove = new MovimentJoystick(0, 0);
+    protected MovimentJoystick mMove = new MovimentJoystick(0, 0);
     private MovimentJoystick ultimMoviment = new MovimentJoystick(0, 0);
 
     @Override

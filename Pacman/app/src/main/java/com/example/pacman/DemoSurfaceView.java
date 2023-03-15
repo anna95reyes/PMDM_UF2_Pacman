@@ -39,6 +39,9 @@ public class DemoSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     List<GameObject> mGameObjects;
     //------------------------------------------
 
+    PointF posicioDelDit;
+    MovimentJoystick mMoviment;
+
     public DemoSurfaceView(Context context) {
         this(context, null);
     }
@@ -55,8 +58,7 @@ public class DemoSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     }
 
 
-    PointF posicioDelDit;
-    MovimentJoystick mMoviment;
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);

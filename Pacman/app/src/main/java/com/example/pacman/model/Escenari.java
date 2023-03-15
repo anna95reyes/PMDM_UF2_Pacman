@@ -26,7 +26,7 @@ public class Escenari extends GameObject {
     private static final int PUNTUACIO_MENJAR_SUPERCOCO = 50;
     private static final int PUNTUACIO_MENJAR_FANTASMA = 200;
 
-    private static final int MAX_VIDES = 1;//3;
+    private static final int MAX_VIDES = 3;
     private static final int TEMPS_FANTASMES_ESPANTATS_EN_SEGONS = 5;
 
     private int midaCella;
@@ -234,17 +234,28 @@ public class Escenari extends GameObject {
     private void dibuixarGuanyarOPerdreITornarEnrrere(Canvas canvas, PointF pixels, String text) {
 
         canvas.drawText(text, pixels.x, pixels.y, pFiPartida);
-
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        MainActivity.mainActivity.finish();
-
+        pausarGameObjects();
+        MainActivity.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                MainActivity.mainActivity.finish();
+            }
+        }, 5000);
 
     }
+
+    public void pausarGameObjects() {
+        for(GameObject b: mView.GameObjects()){
+            if (b instanceof Ghost) {
+                Ghost ghost = (Ghost) b;
+                ghost.mMove = new MovimentJoystick(0, 0);
+            } else if (b instanceof Pacman) {
+                Pacman pacman = (Pacman) b;
+                pacman.mMove = new MovimentJoystick(0, 0);
+            }
+        }
+    }
+
 
     // Retornem true NOMES quan el personatge esta clavat dins de la cel·la.
     // En aquest moment pot fer girs i es controlen col·lisions
@@ -300,7 +311,6 @@ public class Escenari extends GameObject {
 
     public void espantarFantasmes() {
         for(GameObject b: mView.GameObjects()){
-            //TODO
             if (b instanceof Ghost) {
                 //fantasmes
                 Ghost ghost = (Ghost) b;
@@ -316,7 +326,6 @@ public class Escenari extends GameObject {
 
     public void fantasmesDeixenDeEstarEspantats() {
         for(GameObject b: mView.GameObjects()){
-            //TODO
             if (b instanceof Ghost) {
                 //fantasmes
                 Ghost ghost = (Ghost) b;
@@ -352,8 +361,11 @@ public class Escenari extends GameObject {
                         ghost.setModeEspantat(false);
                         mPuntuacio += PUNTUACIO_MENJAR_FANTASMA;
                     } else {
-                        pacman.mPosicio = getPosicioEnPixels(mPosicioIniciPacman);
                         mVides--;
+                        if (mVides > 0) {
+                            pacman.mPosicio = getPosicioEnPixels(mPosicioIniciPacman);
+                        }
+
                     }
                 }
             }
