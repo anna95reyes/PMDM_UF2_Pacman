@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.util.Log;
 
 import com.example.pacman.DemoSurfaceView;
 import com.example.pacman.MainActivity;
@@ -41,7 +42,6 @@ public class Escenari extends GameObject {
     private int mMida;
     private int mPuntuacio;
     private int mVides;
-    private Date tempsEsticCagat;
 
     private final Point mPosicioIniciPacman;
     private final Point mPosicioIniciBlinky;
@@ -272,6 +272,15 @@ public class Escenari extends GameObject {
         }
     }
 
+    public Point getPosicioActualPacman() {
+        for(GameObject b: mView.GameObjects()){
+            if (b instanceof Pacman) {
+                Pacman pacman = (Pacman) b;
+                return getPosicioALaGraella(pacman.mPosicio);
+            }
+        }
+        return null;
+    }
 
     // Retornem true NOMES quan el personatge esta clavat dins de la cel·la.
     // En aquest moment pot fer girs i es controlen col·lisions
@@ -331,9 +340,6 @@ public class Escenari extends GameObject {
                 //fantasmes
                 Ghost ghost = (Ghost) b;
                 ghost.setModeEspantat(true);
-                if (ghost.getModeEspantat()) {
-                    tempsEsticCagat = new Date();
-                }
             }
         }
     }
@@ -346,16 +352,13 @@ public class Escenari extends GameObject {
                 //fantasmes
                 Ghost ghost = (Ghost) b;
                 if (ghost.getModeEspantat()) {
-                    Calendar pasatElTemps = Calendar.getInstance();
-                    pasatElTemps.setTime(tempsEsticCagat);
-                    pasatElTemps.set(Calendar.SECOND, pasatElTemps.get(Calendar.SECOND) + TEMPS_FANTASMES_ESPANTATS_EN_SEGONS);
 
-                    String d1 = mFormatter.format(pasatElTemps.getTime());
-                    String d2 = mFormatter.format(Calendar.getInstance().getTime());
-
-                    if (d1.equals(d2)) {
-                        ghost.setModeEspantat(false);
-                    }
+                    MainActivity.handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            ghost.setModeEspantat(false);
+                        }
+                    }, TEMPS_FANTASMES_ESPANTATS_EN_SEGONS * 1000);
                 }
             }
         }
