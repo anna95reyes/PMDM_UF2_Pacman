@@ -38,20 +38,17 @@ public class Blinky extends Ghost {
             double distancia;
             Point posicioPacman = mEscenari.getPosicioActualPacman();
             Point posicioGhost = mEscenari.getPosicioALaGraella(mPosicio);
-            Log.d("XXX", "pacman: " + posicioPacman);
             for (int i = 0; i < direccionsPossibles.size(); i++){
                 distancia = Math.hypot(
                         (posicioPacman.x - (posicioGhost.x + direccionsPossibles.get(i).x)),
                         (posicioPacman.y - (posicioGhost.y + direccionsPossibles.get(i).y))
                 );
-                Log.d("XXX", "distancia" + i + ": " + distancia);
                 if (distanciaMesCurta > distancia) {
                     distanciaMesCurta = distancia;
                     indexPosMesAprop = i;
                 }
 
             }
-            Log.d("XXX", "distancia mes curta " + indexPosMesAprop + ": " + distanciaMesCurta);
             Point p = direccionsPossibles.get(indexPosMesAprop);
             return new MovimentJoystick(p.x, p.y);
         }

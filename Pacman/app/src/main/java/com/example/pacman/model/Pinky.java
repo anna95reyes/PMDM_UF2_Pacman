@@ -40,7 +40,6 @@ public class Pinky extends Ghost {
 
             Point posicioGhost = mEscenari.getPosicioALaGraella(mPosicio);
 
-            Log.d("XXX", "pacman: " + posicioPacman);
             for (int i = 0; i < direccionsPossibles.size(); i++){
                 Point dir = posicioPacman;
                 dir.x = dir.x + ((int)Math.signum(direccioPacman.x) * 4);
@@ -50,14 +49,12 @@ public class Pinky extends Ghost {
                         (dir.x - (posicioGhost.x + direccionsPossibles.get(i).x)),
                         (dir.y - (posicioGhost.y + direccionsPossibles.get(i).y))
                 );
-                Log.d("XXX", "distancia" + i + ": " + distancia);
                 if (distanciaMesCurta > distancia) {
                     distanciaMesCurta = distancia;
                     indexPosMesAprop = i;
                 }
 
             }
-            Log.d("XXX", "distancia mes curta " + indexPosMesAprop + ": " + distanciaMesCurta);
             Point p = direccionsPossibles.get(indexPosMesAprop);
             return new MovimentJoystick(p.x, p.y);
 

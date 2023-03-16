@@ -88,8 +88,7 @@ public abstract class Ghost extends Sprite {
         }
 
         if (canviDireccio) {
-            MovimentJoystick x = canviaDireccio(canviDireccio, direccionsPossibles);
-            if (x != null) return x;
+            return canviaDireccio(canviDireccio, direccionsPossibles);
         }
 
         return mMove; //no canviem direccio
