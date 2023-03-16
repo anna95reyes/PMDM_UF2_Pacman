@@ -282,6 +282,16 @@ public class Escenari extends GameObject {
         return null;
     }
 
+    public MovimentJoystick getUltimMovimentPacman(){
+        for(GameObject b: mView.GameObjects()){
+            if (b instanceof Pacman) {
+                Pacman pacman = (Pacman) b;
+                return pacman.ultimMoviment;
+            }
+        }
+        return null;
+    }
+
     // Retornem true NOMES quan el personatge esta clavat dins de la cel·la.
     // En aquest moment pot fer girs i es controlen col·lisions
     public boolean esticALaCasella(PointF posicioPixels){
@@ -345,7 +355,6 @@ public class Escenari extends GameObject {
     }
 
 
-
     public void fantasmesDeixenDeEstarEspantats() {
         for(GameObject b: mView.GameObjects()){
             if (b instanceof Ghost) {
@@ -380,10 +389,9 @@ public class Escenari extends GameObject {
                         ghost.setModeEspantat(false);
                         mPuntuacio += PUNTUACIO_MENJAR_FANTASMA;
                     } else {
+                        pacman.mPosicio = getPosicioEnPixels(mPosicioIniciPacman);
+                        ghost.mPosicio = tornarFantasmaEspantatPosicioInicial(ghost);
                         mVides--;
-                        if (mVides > 0) {
-                            pacman.mPosicio = getPosicioEnPixels(mPosicioIniciPacman);
-                        }
 
                     }
                 }

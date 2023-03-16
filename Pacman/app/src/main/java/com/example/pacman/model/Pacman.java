@@ -16,6 +16,8 @@ public class Pacman extends Sprite {
     //Distancia en pixels recorreguda per ticks
 
     private float pasEnPixels;
+    protected MovimentJoystick mMove = new MovimentJoystick(0, 0);
+    public MovimentJoystick ultimMoviment = new MovimentJoystick(0, 0);
 
     public Pacman(DemoSurfaceView view, int width, int height, int midaCella) {
         super(view, width, height, midaCella, midaCella);
@@ -32,9 +34,6 @@ public class Pacman extends Sprite {
         sprites.add(R.drawable.pacman);
         return sprites;
     }
-
-    protected MovimentJoystick mMove = new MovimentJoystick(0, 0);
-    private MovimentJoystick ultimMoviment = new MovimentJoystick(0, 0);
 
     @Override
     public void tick() {
