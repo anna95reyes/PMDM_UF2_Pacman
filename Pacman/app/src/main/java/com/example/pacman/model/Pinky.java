@@ -25,66 +25,45 @@ public class Pinky extends Ghost {
     }
 
     @Override
-    protected MovimentJoystick recalculaDireccio() {
+    protected MovimentJoystick canviaDireccio(boolean canviDireccio, List<Point> direccionsPossibles) {
+        if (getModeEspantat()) {
+            int idx = (int) (Math.random() * direccionsPossibles.size());
+            Point p = direccionsPossibles.get(idx);
+            return new MovimentJoystick(p.x, p.y);
+        } else {
+            Point posicioPacman = mEscenari.getPosicioActualPacman();
+            MovimentJoystick direccioPacman = mEscenari.getUltimMovimentPacman();
 
-        boolean canviDireccio = false;
+            int indexPosMesAprop = 0;
+            double distanciaMesCurta = Double.MAX_VALUE;
+            double distancia;
 
-        // cas 1: me la fotre si continuo aixi
-        boolean xoco = !mEscenari.emPucMoureEnDireccio(mPosicio, mMove.getPoint());
-        if (xoco) {
-            canviDireccio = true;
-        }
-        // cas 2: estic a una cruilla amb nous camins perpendiculars
-        List<Point> direccionsPossibles = new ArrayList<>();
-        for (int i = 0; i < mDireccions.length; i++){
-            if (mEscenari.emPucMoureEnDireccio(mPosicio, mDireccions[i])) {
-                direccionsPossibles.add(mDireccions[i]);
-            }
+            Point posicioGhost = mEscenari.getPosicioALaGraella(mPosicio);
 
-        }
-        if (!xoco) {
-            canviDireccio = direccionsPossibles.size()>2; //hi ha mes de dos direccions
-        }
+            Log.d("XXX", "pacman: " + posicioPacman);
+            for (int i = 0; i < direccionsPossibles.size(); i++){
+                Point dir = posicioPacman;
+                dir.x = dir.x + ((int)Math.signum(direccioPacman.x) * 4);
+                dir.y = dir.y + ((int)Math.signum(direccioPacman.y) * 4);
 
-        if (canviDireccio) {
-            if (getModeEspantat()) {
-                int idx = (int) (Math.random() * direccionsPossibles.size());
-                Point p = direccionsPossibles.get(idx);
-                return new MovimentJoystick(p.x, p.y);
-            } else {
-                Point posicioPacman = mEscenari.getPosicioActualPacman();
-                MovimentJoystick direccioPacman = mEscenari.getUltimMovimentPacman();
-
-                int indexPosMesAprop = 0;
-                double distanciaMesCurta = 0;
-                double distancia;
-                Log.d("XXX", "pacman: " + posicioPacman);
-                for (int i = 0; i < direccionsPossibles.size(); i++){
-                    Point dir = posicioPacman;
-                    dir.x = dir.x + ((int)Math.signum(direccioPacman.x) * 4);
-                    dir.y = dir.y + ((int)Math.signum(direccioPacman.y) * 4);
-
-                    distancia = Math.hypot(
-                            (dir.x - direccionsPossibles.get(i).x),
-                            (dir.y - direccionsPossibles.get(i).y)
-                    );
-                    Log.d("XXX", "distancia" + i + ": " + distancia);
-                    if (i == 0 || distanciaMesCurta > distancia) {
-                        distanciaMesCurta = distancia;
-                        indexPosMesAprop = i;
-                    }
-
+                distancia = Math.hypot(
+                        (dir.x - (posicioGhost.x + direccionsPossibles.get(i).x)),
+                        (dir.y - (posicioGhost.y + direccionsPossibles.get(i).y))
+                );
+                Log.d("XXX", "distancia" + i + ": " + distancia);
+                if (distanciaMesCurta > distancia) {
+                    distanciaMesCurta = distancia;
+                    indexPosMesAprop = i;
                 }
-                Log.d("XXX", "distancia mes curta " + indexPosMesAprop + ": " + distanciaMesCurta);
-                Point p = direccionsPossibles.get(indexPosMesAprop);
-                return new MovimentJoystick(p.x, p.y);
 
             }
+            Log.d("XXX", "distancia mes curta " + indexPosMesAprop + ": " + distanciaMesCurta);
+            Point p = direccionsPossibles.get(indexPosMesAprop);
+            return new MovimentJoystick(p.x, p.y);
 
         }
-
-        return mMove; //no canviem direccio
-
     }
+
+
 
 }

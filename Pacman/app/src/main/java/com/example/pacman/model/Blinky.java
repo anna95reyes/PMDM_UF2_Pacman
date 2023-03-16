@@ -25,59 +25,37 @@ public class Blinky extends Ghost {
         return sprites;
     }
 
+
     @Override
-    protected MovimentJoystick recalculaDireccio() {
-
-        boolean canviDireccio = false;
-
-        // cas 1: me la fotre si continuo aixi
-        boolean xoco = !mEscenari.emPucMoureEnDireccio(mPosicio, mMove.getPoint());
-        if (xoco) {
-            canviDireccio = true;
-        }
-        // cas 2: estic a una cruilla amb nous camins perpendiculars
-        List<Point> direccionsPossibles = new ArrayList<>();
-        for (int i = 0; i < mDireccions.length; i++){
-            if (mEscenari.emPucMoureEnDireccio(mPosicio, mDireccions[i])) {
-                direccionsPossibles.add(mDireccions[i]);
-            }
-
-        }
-        if (!xoco) {
-            canviDireccio = direccionsPossibles.size()>2; //hi ha mes de dos direccions
-        }
-
-        if (canviDireccio) {
-            if (getModeEspantat()) {
-                int idx = (int) (Math.random() * direccionsPossibles.size());
-                Point p = direccionsPossibles.get(idx);
-                return new MovimentJoystick(p.x, p.y);
-            } else {
-                int indexPosMesAprop = 0;
-                double distanciaMesCurta = 0;
-                double distancia;
-                Point posicioPacman = mEscenari.getPosicioActualPacman();
-                Log.d("XXX", "pacman: " + posicioPacman);
-                for (int i = 0; i < direccionsPossibles.size(); i++){
-                    distancia = Math.hypot(
-                            (posicioPacman.x - direccionsPossibles.get(i).x),
-                            (posicioPacman.y - direccionsPossibles.get(i).y)
-                    );
-                    Log.d("XXX", "distancia" + i + ": " + distancia);
-                    if (i == 0 || distanciaMesCurta > distancia) {
-                        distanciaMesCurta = distancia;
-                        indexPosMesAprop = i;
-                    }
-
+    protected MovimentJoystick canviaDireccio(boolean canviDireccio, List<Point> direccionsPossibles) {
+        if (getModeEspantat()) {
+            int idx = (int) (Math.random() * direccionsPossibles.size());
+            Point p = direccionsPossibles.get(idx);
+            return new MovimentJoystick(p.x, p.y);
+        } else {
+            int indexPosMesAprop = 0;
+            double distanciaMesCurta = Double.MAX_VALUE;
+            double distancia;
+            Point posicioPacman = mEscenari.getPosicioActualPacman();
+            Point posicioGhost = mEscenari.getPosicioALaGraella(mPosicio);
+            Log.d("XXX", "pacman: " + posicioPacman);
+            for (int i = 0; i < direccionsPossibles.size(); i++){
+                distancia = Math.hypot(
+                        (posicioPacman.x - (posicioGhost.x + direccionsPossibles.get(i).x)),
+                        (posicioPacman.y - (posicioGhost.y + direccionsPossibles.get(i).y))
+                );
+                Log.d("XXX", "distancia" + i + ": " + distancia);
+                if (distanciaMesCurta > distancia) {
+                    distanciaMesCurta = distancia;
+                    indexPosMesAprop = i;
                 }
-                Log.d("XXX", "distancia mes curta " + indexPosMesAprop + ": " + distanciaMesCurta);
-                Point p = direccionsPossibles.get(indexPosMesAprop);
-                return new MovimentJoystick(p.x, p.y);
+
             }
+            Log.d("XXX", "distancia mes curta " + indexPosMesAprop + ": " + distanciaMesCurta);
+            Point p = direccionsPossibles.get(indexPosMesAprop);
+            return new MovimentJoystick(p.x, p.y);
         }
-
-        return mMove; //no canviem direccio
-
     }
+
 
 }

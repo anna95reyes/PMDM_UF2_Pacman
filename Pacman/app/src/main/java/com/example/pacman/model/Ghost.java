@@ -3,6 +3,8 @@ package com.example.pacman.model;
 import android.graphics.Canvas;
 import android.graphics.Point;
 
+import androidx.annotation.Nullable;
+
 import com.example.pacman.DemoSurfaceView;
 
 import java.util.ArrayList;
@@ -85,13 +87,19 @@ public abstract class Ghost extends Sprite {
             canviDireccio = direccionsPossibles.size()>2; //hi ha mes de dos direccions
         }
 
-        if (canviDireccio){
-            int idx = (int)(Math.random() * direccionsPossibles.size());
-            Point p = direccionsPossibles.get(idx);
-            return new MovimentJoystick(p.x, p.y);
+        if (canviDireccio) {
+            MovimentJoystick x = canviaDireccio(canviDireccio, direccionsPossibles);
+            if (x != null) return x;
         }
 
         return mMove; //no canviem direccio
 
+    }
+
+
+    protected MovimentJoystick canviaDireccio(boolean canviDireccio, List<Point> direccionsPossibles) {
+        int idx = (int)(Math.random() * direccionsPossibles.size());
+        Point p = direccionsPossibles.get(idx);
+        return new MovimentJoystick(p.x, p.y);
     }
 }
