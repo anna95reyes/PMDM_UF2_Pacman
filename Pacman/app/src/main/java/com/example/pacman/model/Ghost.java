@@ -3,6 +3,7 @@ package com.example.pacman.model;
 import android.graphics.Canvas;
 import android.graphics.Point;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.pacman.DemoSurfaceView;
@@ -88,17 +89,32 @@ public abstract class Ghost extends Sprite {
         }
 
         if (canviDireccio) {
-            return canviaDireccio(canviDireccio, direccionsPossibles);
+            if (getModeEspantat()) {
+                return getMovimentGhostEspantat(direccionsPossibles);
+            } else {
+                Point posicioPacman = mEscenari.getPosicioActualPacman();
+                Point posicioGhost = mEscenari.getPosicioALaGraella(mPosicio);
+                return getMovimentGhostNormal(direccionsPossibles, posicioPacman, posicioGhost);
+            }
         }
 
         return mMove; //no canviem direccio
 
     }
 
+    protected MovimentJoystick getMovimentGhostNormal(List<Point> direccionsPossibles, Point posicioPacman, Point posicioGhost) {
+        return getMovimentAleatoris(direccionsPossibles);
+    }
 
-    protected MovimentJoystick canviaDireccio(boolean canviDireccio, List<Point> direccionsPossibles) {
-        int idx = (int)(Math.random() * direccionsPossibles.size());
+    protected MovimentJoystick getMovimentGhostEspantat(List<Point> direccionsPossibles) {
+        return getMovimentAleatoris(direccionsPossibles);
+    }
+
+    protected MovimentJoystick getMovimentAleatoris(List<Point> direccionsPossibles) {
+        int idx = (int) (Math.random() * direccionsPossibles.size());
         Point p = direccionsPossibles.get(idx);
         return new MovimentJoystick(p.x, p.y);
     }
+
+
 }

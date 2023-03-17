@@ -25,40 +25,35 @@ public class Pinky extends Ghost {
     }
 
     @Override
-    protected MovimentJoystick canviaDireccio(boolean canviDireccio, List<Point> direccionsPossibles) {
-        if (getModeEspantat()) {
-            int idx = (int) (Math.random() * direccionsPossibles.size());
-            Point p = direccionsPossibles.get(idx);
-            return new MovimentJoystick(p.x, p.y);
-        } else {
-            Point posicioPacman = mEscenari.getPosicioActualPacman();
-            MovimentJoystick direccioPacman = mEscenari.getUltimMovimentPacman();
+    protected MovimentJoystick getMovimentGhostNormal(List<Point> direccionsPossibles, Point posicioPacman, Point posicioGhost) {
+        return getMovimentPinky(direccionsPossibles, posicioPacman, posicioGhost);
+    }
 
-            int indexPosMesAprop = 0;
-            double distanciaMesCurta = Double.MAX_VALUE;
-            double distancia;
+    private MovimentJoystick getMovimentPinky(List<Point> direccionsPossibles, Point posicioPacman, Point posicioGhost) {
 
-            Point posicioGhost = mEscenari.getPosicioALaGraella(mPosicio);
+        MovimentJoystick direccioPacman = mEscenari.getUltimMovimentPacman();
 
-            for (int i = 0; i < direccionsPossibles.size(); i++){
-                Point dir = posicioPacman;
-                dir.x = dir.x + ((int)Math.signum(direccioPacman.x) * 4);
-                dir.y = dir.y + ((int)Math.signum(direccioPacman.y) * 4);
+        int indexPosMesAprop = 0;
+        double distanciaMesCurta = Double.MAX_VALUE;
+        double distancia;
 
-                distancia = Math.hypot(
-                        (dir.x - (posicioGhost.x + direccionsPossibles.get(i).x)),
-                        (dir.y - (posicioGhost.y + direccionsPossibles.get(i).y))
-                );
-                if (distanciaMesCurta > distancia) {
-                    distanciaMesCurta = distancia;
-                    indexPosMesAprop = i;
-                }
+        for (int i = 0; i < direccionsPossibles.size(); i++){
+            Point dir = posicioPacman;
+            dir.x = dir.x + ((int)Math.signum(direccioPacman.x) * 4);
+            dir.y = dir.y + ((int)Math.signum(direccioPacman.y) * 4);
 
+            distancia = Math.hypot(
+                    (dir.x - (posicioGhost.x + direccionsPossibles.get(i).x)),
+                    (dir.y - (posicioGhost.y + direccionsPossibles.get(i).y))
+            );
+            if (distanciaMesCurta > distancia) {
+                distanciaMesCurta = distancia;
+                indexPosMesAprop = i;
             }
-            Point p = direccionsPossibles.get(indexPosMesAprop);
-            return new MovimentJoystick(p.x, p.y);
 
         }
+        Point p = direccionsPossibles.get(indexPosMesAprop);
+        return new MovimentJoystick(p.x, p.y);
     }
 
 

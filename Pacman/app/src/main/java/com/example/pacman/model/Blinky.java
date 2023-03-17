@@ -27,31 +27,27 @@ public class Blinky extends Ghost {
 
 
     @Override
-    protected MovimentJoystick canviaDireccio(boolean canviDireccio, List<Point> direccionsPossibles) {
-        if (getModeEspantat()) {
-            int idx = (int) (Math.random() * direccionsPossibles.size());
-            Point p = direccionsPossibles.get(idx);
-            return new MovimentJoystick(p.x, p.y);
-        } else {
-            int indexPosMesAprop = 0;
-            double distanciaMesCurta = Double.MAX_VALUE;
-            double distancia;
-            Point posicioPacman = mEscenari.getPosicioActualPacman();
-            Point posicioGhost = mEscenari.getPosicioALaGraella(mPosicio);
-            for (int i = 0; i < direccionsPossibles.size(); i++){
-                distancia = Math.hypot(
-                        (posicioPacman.x - (posicioGhost.x + direccionsPossibles.get(i).x)),
-                        (posicioPacman.y - (posicioGhost.y + direccionsPossibles.get(i).y))
-                );
-                if (distanciaMesCurta > distancia) {
-                    distanciaMesCurta = distancia;
-                    indexPosMesAprop = i;
-                }
+    protected MovimentJoystick getMovimentGhostNormal(List<Point> direccionsPossibles, Point posicioPacman, Point posicioGhost) {
+        return getMovimentBlinky(direccionsPossibles, posicioPacman, posicioGhost);
+    }
 
+    private MovimentJoystick getMovimentBlinky(List<Point> direccionsPossibles, Point posicioPacman, Point posicioGhost) {
+        int indexPosMesAprop = 0;
+        double distanciaMesCurta = Double.MAX_VALUE;
+        double distancia;
+        for (int i = 0; i < direccionsPossibles.size(); i++){
+            distancia = Math.hypot(
+                    (posicioPacman.x - (posicioGhost.x + direccionsPossibles.get(i).x)),
+                    (posicioPacman.y - (posicioGhost.y + direccionsPossibles.get(i).y))
+            );
+            if (distanciaMesCurta > distancia) {
+                distanciaMesCurta = distancia;
+                indexPosMesAprop = i;
             }
-            Point p = direccionsPossibles.get(indexPosMesAprop);
-            return new MovimentJoystick(p.x, p.y);
+
         }
+        Point p = direccionsPossibles.get(indexPosMesAprop);
+        return new MovimentJoystick(p.x, p.y);
     }
 
 
